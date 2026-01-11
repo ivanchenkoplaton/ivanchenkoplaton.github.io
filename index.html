@@ -3,83 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Protected Links</title>
+    <title>My Protected Hub</title>
     <style>
-        /* (Same Styles as before) */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { text-align: center; width: 100%; max-width: 400px; padding: 20px; }
-        #login-screen { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; width: 70%; margin-bottom: 10px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { width: 100%; max-width: 450px; text-align: center; }
+
+        /* Login Screen */
+        #login-screen { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-top: 50px; }
+        input[type="password"] { padding: 12px; border: 1px solid #ddd; border-radius: 6px; width: 70%; margin-bottom: 15px; }
+        button { padding: 12px 25px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         button:hover { background: #0056b3; }
-        .error { color: red; font-size: 0.9rem; display: none; margin-top: 10px; }
-        #protected-content { display: none; }
-        .profile-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #007bff; }
-        
-        /* Link Card Styles */
-        .link-card { display: block; background: white; color: #333; text-decoration: none; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .link-card:hover { transform: translateY(-3px); background: #007bff; color: white; }
-        .icon { margin-right: 8px; }
+        .error { color: red; display: none; margin-top: 10px; }
+
+        /* Main Content */
+        #protected-content { display: none; width: 100%; }
+        .header { margin-bottom: 30px; }
+        .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #007bff; object-fit: cover; }
+
+        /* Link Cards */
+        .link-card { 
+            background: white; color: #333; text-decoration: none; 
+            padding: 18px; margin-bottom: 12px; border-radius: 10px; 
+            display: flex; align-items: center; text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; 
+        }
+        .link-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); color: #007bff; }
+        .icon { font-size: 1.5rem; margin-right: 15px; }
+        .link-info { display: flex; flex-direction: column; }
+        .link-title { font-weight: 600; font-size: 1rem; }
+        .link-url { font-size: 0.75rem; color: #888; }
+
+        /* THE ADD BUTTON */
+        .add-btn {
+            position: fixed; bottom: 30px; right: 30px;
+            background: #28a745; color: white; width: 60px; height: 60px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            text-decoration: none; transition: transform 0.2s;
+        }
+        .add-btn:hover { transform: scale(1.1); background: #218838; }
+        .tooltip { position: absolute; right: 70px; background: #333; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; width: max-content; }
+        .add-btn:hover .tooltip { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div id="login-screen">
-            <h2>Restricted Access</h2>
-            <p>Please enter the password to view these files.</p>
-            <input type="password" id="passwordInput" placeholder="Enter Password">
-            <br>
-            <button onclick="checkPassword()">Unlock</button>
-            <p class="error" id="errorMessage">Wrong password!</p>
+    <div id="login-screen" class="container">
+        <h2>🔒 Restricted</h2>
+        <p>Enter password to unlock.</p>
+        <input type="password" id="passwordInput" placeholder="Password">
+        <br>
+        <button onclick="checkPassword()">Unlock</button>
+        <p class="error" id="errorMessage">Wrong password</p>
+    </div>
+
+    <div id="protected-content" class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/150" alt="Me" class="profile-img">
+            <h2>My Links</h2>
         </div>
 
-        <div id="protected-content">
-            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img">
-            <h2>My Links & Files</h2>
-            
-            <div id="link-container"></div>
-        </div>
+        <div id="link-container">Loading...</div>
+
+        <a href="#" id="github-edit-btn" class="add-btn" target="_blank">
+            +
+            <div class="tooltip">Edit Links CSV</div>
+        </a>
     </div>
 
     <script>
-        // --- CONFIGURATION: ADD YOUR LINKS HERE ---
-        const myLinks = [
-            { title: "My GitHub Profile", url: "https://github.com", icon: "🔗" },
-            { title: "My LinkedIn",       url: "https://linkedin.com", icon: "🔗" },
-            { title: "Download Resume",   url: "./files/my-resume.pdf", icon: "📄" },
-            { title: "Project Brief",     url: "./files/project-brief.docx", icon: "📂" }
-            // TO ADD A NEW LINK: Copy a line above, paste it here, and change the text!
-        ];
+        // === CONFIGURATION ===
+        const myPassword = "123"; 
         
-        const myPassword = "mypassword123"; 
-        // ------------------------------------------
+        // IMPORTANT: REPLACE THIS with your actual GitHub CSV Edit URL
+        // Format: https://github.com/USERNAME/REPOSITORY/edit/main/links.csv
+        const githubEditUrl = "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/edit/main/links.csv";
+        // =====================
+
+        // Set the button link immediately
+        document.getElementById("github-edit-btn").href = githubEditUrl;
 
         function checkPassword() {
-            const password = document.getElementById("passwordInput").value;
-            const errorMsg = document.getElementById("errorMessage");
-
-            if (password === myPassword) {
+            if (document.getElementById("passwordInput").value === myPassword) {
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("protected-content").style.display = "block";
-                renderLinks(); // Run the function to build the list
+                loadLinks();
             } else {
-                errorMsg.style.display = "block";
+                document.getElementById("errorMessage").style.display = "block";
             }
         }
 
-        // The Function to create the HTML automatically
-        function renderLinks() {
-            const container = document.getElementById("link-container");
-            container.innerHTML = ""; // Clear existing
+        function loadLinks() {
+            // Fetch the local CSV file
+            fetch('./links.csv?t=' + new Date().getTime()) // Timestamp prevents caching
+            .then(response => response.text())
+            .then(csvText => {
+                const rows = csvText.split('\n');
+                const container = document.getElementById("link-container");
+                container.innerHTML = ""; 
 
-            myLinks.forEach(link => {
-                const a = document.createElement("a");
-                a.className = "link-card";
-                a.href = link.url;
-                a.target = "_blank";
-                a.innerHTML = `<span class="icon">${link.icon}</span> ${link.title}`;
-                container.appendChild(a);
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Skip Header Row
+                    if (!row.trim()) return; // Skip empty rows
+
+                    const cols = row.split(',');
+                    // CSV Columns: 0=Title, 1=Url, 2=Type
+                    const title = cols[0].trim();
+                    const url = cols[1].trim();
+                    const type = cols[2] ? cols[2].trim() : "web";
+
+                    let icon = "🔗";
+                    if(type.includes('file')) icon = "📂";
+                    if(type.includes('video')) icon = "🎬";
+
+                    const html = `
+                        <a href="${url}" class="link-card" target="_blank">
+                            <span class="icon">${icon}</span>
+                            <div class="link-info">
+                                <span class="link-title">${title}</span>
+                                <span class="link-url">${url}</span>
+                            </div>
+                        </a>
+                    `;
+                    container.innerHTML += html;
+                });
+            })
+            .catch(err => {
+                document.getElementById("link-container").innerHTML = "Error loading links.csv";
+                console.error(err);
             });
         }
     </script>
