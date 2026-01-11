@@ -1,0 +1,18 @@
+<script>
+    function checkPassword() {
+        const password = document.getElementById("pass").value;
+        // This is a very basic example
+        if (password === "admin123") {
+            alert("Access Granted! Here you would link to your CMS or Editor.");
+            window.location.href = "editor.html"; 
+        } else {
+            alert("Wrong password.");
+        }
+    }
+</script>
+
+<div style="text-align:center; margin-top:100px;">
+    <h2>Admin Access</h2>
+    <input type="password" id="pass" placeholder="Enter Password">
+    <button onclick="checkPassword()">Login</button>
+</div>
