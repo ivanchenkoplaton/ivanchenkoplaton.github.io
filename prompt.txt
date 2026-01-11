@@ -1,7 +1,0 @@
-index.html
-mainpage
-    link to Software
-    link to Service
-    
-Password protected
-easy website adding

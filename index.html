@@ -3,54 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio | Software & Services</title>
+    <title>My Protected Links</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #f4f4f4; }
-        header { background: #333; color: #fff; padding: 1rem; text-align: center; }
-        nav { display: flex; justify-content: center; background: #444; }
-        nav a { color: white; padding: 14px 20px; text-decoration: none; text-transform: uppercase; }
-        nav a:hover { background: #555; }
-        .container { width: 80%; margin: auto; overflow: hidden; padding: 20px; background: white; margin-top: 20px; border-radius: 8px; }
-        .card { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 5px; transition: 0.3s; }
-        .card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #777; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { text-align: center; width: 100%; max-width: 400px; padding: 20px; }
+        
+        /* Password Gate Styles */
+        #login-screen { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; width: 70%; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-size: 0.9rem; display: none; margin-top: 10px; }
+
+        /* Actual Content Styles (Hidden by default) */
+        #protected-content { display: none; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #007bff; }
+        .link-card { display: block; background: white; color: #333; text-decoration: none; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .link-card:hover { transform: translateY(-3px); background: #007bff; color: white; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Welcome to My Portal</h1>
-</header>
-
-<nav>
-    <a href="#software">Software</a>
-    <a href="#services">Services</a>
-    <a href="admin.html">Add New (Admin)</a>
-</nav>
-
-<div class="container">
-    <section id="software">
-        <h2>Software Solutions</h2>
-        <div class="card">
-            <h3>Project Alpha</h3>
-            <p>Our flagship automation software for enterprise efficiency.</p>
+    <div class="container">
+        <div id="login-screen">
+            <h2>Restricted Access</h2>
+            <p>Please enter the password to view these files.</p>
+            <input type="password" id="passwordInput" placeholder="Enter Password">
+            <br>
+            <button onclick="checkPassword()">Unlock</button>
+            <p class="error" id="errorMessage">Wrong password!</p>
         </div>
-    </section>
 
-    <hr>
-
-    <section id="services">
-        <h2>Our Services</h2>
-        <div class="card">
-            <h3>Consulting</h3>
-            <p>Expert guidance on digital transformation and cloud architecture.</p>
+        <div id="protected-content">
+            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img">
+            <h2>My Links & Files</h2>
+            
+            <a href="https://github.com" class="link-card" target="_blank">🔗 My GitHub Profile</a>
+            <a href="https://linkedin.com" class="link-card" target="_blank">🔗 LinkedIn</a>
+            
+            <a href="./files/my-resume.pdf" class="link-card" target="_blank">📄 Download Resume (PDF)</a>
+            <a href="./files/project-brief.docx" class="link-card" target="_blank">📂 Download Project Brief</a>
         </div>
-    </section>
-</div>
+    </div>
 
-<div class="footer">
-    &copy; 2026 My Website Index. All rights reserved.
-</div>
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("passwordInput").value;
+            const errorMsg = document.getElementById("errorMessage");
+            
+            // CHANGE THIS TO YOUR DESIRED PASSWORD
+            const correctPassword = "mypassword123"; 
 
+            if (password === correctPassword) {
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("protected-content").style.display = "block";
+            } else {
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
