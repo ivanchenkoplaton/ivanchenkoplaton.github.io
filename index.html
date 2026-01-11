@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Protected Links</title>
     <style>
+        /* (Same Styles as before) */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { text-align: center; width: 100%; max-width: 400px; padding: 20px; }
-        
-        /* Password Gate Styles */
         #login-screen { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         input { padding: 10px; border: 1px solid #ddd; border-radius: 5px; width: 70%; margin-bottom: 10px; }
         button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
         button:hover { background: #0056b3; }
         .error { color: red; font-size: 0.9rem; display: none; margin-top: 10px; }
-
-        /* Actual Content Styles (Hidden by default) */
         #protected-content { display: none; }
         .profile-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #007bff; }
+        
+        /* Link Card Styles */
         .link-card { display: block; background: white; color: #333; text-decoration: none; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.2s; }
         .link-card:hover { transform: translateY(-3px); background: #007bff; color: white; }
+        .icon { margin-right: 8px; }
     </style>
 </head>
 <body>
@@ -38,30 +38,50 @@
             <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img">
             <h2>My Links & Files</h2>
             
-            <a href="https://github.com" class="link-card" target="_blank">🔗 My GitHub Profile</a>
-            <a href="https://linkedin.com" class="link-card" target="_blank">🔗 LinkedIn</a>
-            
-            <a href="./files/my-resume.pdf" class="link-card" target="_blank">📄 Download Resume (PDF)</a>
-            <a href="./files/project-brief.docx" class="link-card" target="_blank">📂 Download Project Brief</a>
+            <div id="link-container"></div>
         </div>
     </div>
 
     <script>
+        // --- CONFIGURATION: ADD YOUR LINKS HERE ---
+        const myLinks = [
+            { title: "My GitHub Profile", url: "https://github.com", icon: "🔗" },
+            { title: "My LinkedIn",       url: "https://linkedin.com", icon: "🔗" },
+            { title: "Download Resume",   url: "./files/my-resume.pdf", icon: "📄" },
+            { title: "Project Brief",     url: "./files/project-brief.docx", icon: "📂" }
+            // TO ADD A NEW LINK: Copy a line above, paste it here, and change the text!
+        ];
+        
+        const myPassword = "mypassword123"; 
+        // ------------------------------------------
+
         function checkPassword() {
             const password = document.getElementById("passwordInput").value;
             const errorMsg = document.getElementById("errorMessage");
-            
-            // CHANGE THIS TO YOUR DESIRED PASSWORD
-            const correctPassword = "mypassword123"; 
 
-            if (password === correctPassword) {
+            if (password === myPassword) {
                 document.getElementById("login-screen").style.display = "none";
                 document.getElementById("protected-content").style.display = "block";
+                renderLinks(); // Run the function to build the list
             } else {
                 errorMsg.style.display = "block";
             }
         }
+
+        // The Function to create the HTML automatically
+        function renderLinks() {
+            const container = document.getElementById("link-container");
+            container.innerHTML = ""; // Clear existing
+
+            myLinks.forEach(link => {
+                const a = document.createElement("a");
+                a.className = "link-card";
+                a.href = link.url;
+                a.target = "_blank";
+                a.innerHTML = `<span class="icon">${link.icon}</span> ${link.title}`;
+                container.appendChild(a);
+            });
+        }
     </script>
 </body>
-
 </html>
