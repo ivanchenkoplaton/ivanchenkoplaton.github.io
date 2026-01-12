@@ -4,6 +4,7 @@ import csv
 import os
 import shutil
 import datetime
+import subprocess  # <--- Added to run git commands
 
 # CONFIGURATION
 CSV_FILE = 'links.csv'
@@ -34,16 +35,13 @@ def add_web_link():
     messagebox.showinfo("Success", f"Added web link: {title}")
 
 def add_local_file():
-    # 1. Ask for the file
     filepath = filedialog.askopenfilename(title="Select a file to upload")
     if not filepath: return
 
-    # 2. Ask for a title
     title = simpledialog.askstring("Input", "Enter File Title:")
     if not title: 
-        title = os.path.basename(filepath) # Default to filename
+        title = os.path.basename(filepath)
 
-    # 3. Copy file to the 'files' folder
     filename = os.path.basename(filepath)
     destination = os.path.join(FILES_DIR, filename)
     
@@ -56,26 +54,51 @@ def add_local_file():
 
     shutil.copy2(filepath, destination)
 
-    # 4. Update CSV with relative path
-    # We use forward slashes for web compatibility
+    # Use forward slashes for web compatibility
     relative_path = f"{FILES_DIR}/{filename}"
     append_to_csv(title, relative_path, "file")
     
     messagebox.showinfo("Success", f"File copied & added: {title}")
 
+def publish_changes():
+    """Runs the git commands to push changes to GitHub"""
+    confirm = messagebox.askyesno("Publish", "This will sync changes to GitHub.\nAre you sure?")
+    if not confirm: return
+
+    try:
+        # 1. Git Add
+        subprocess.run(["git", "add", "."], check=True)
+        
+        # 2. Git Commit
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+        subprocess.run(["git", "commit", "-m", f"Update links: {timestamp}"], check=True)
+        
+        # 3. Git Push
+        subprocess.run(["git", "push"], check=True)
+        
+        messagebox.showinfo("Published", "Success! Changes are live on GitHub in ~2 mins.")
+    except subprocess.CalledProcessError as e:
+        messagebox.showerror("Error", f"Git Error:\n{e}")
+    except FileNotFoundError:
+        messagebox.showerror("Error", "Git is not installed or not found in PATH.")
+
 def main():
     root = tk.Tk()
     root.title("Website Manager")
-    root.geometry("300x200")
+    root.geometry("350x300")
 
-    label = tk.Label(root, text="Manage Your Links", font=("Arial", 14))
+    label = tk.Label(root, text="Manage Your Links", font=("Segoe UI", 14, "bold"))
     label.pack(pady=20)
 
-    btn_web = tk.Button(root, text="Add Web Link 🔗", command=add_web_link, width=20, bg="#e7f3fe")
-    btn_web.pack(pady=5)
+    # Buttons
+    tk.Button(root, text="Add Web Link 🔗", command=add_web_link, width=25, bg="#e7f3fe").pack(pady=5)
+    tk.Button(root, text="Add Local File 📂", command=add_local_file, width=25, bg="#e6ffed").pack(pady=5)
+    
+    # Separator
+    tk.Frame(root, height=2, bd=1, relief="sunken").pack(fill="x", padx=20, pady=15)
 
-    btn_file = tk.Button(root, text="Add Local File 📂", command=add_local_file, width=20, bg="#e6ffed")
-    btn_file.pack(pady=5)
+    # Publish Button (Red/Important)
+    tk.Button(root, text="☁️ Publish to GitHub", command=publish_changes, width=25, bg="#ffe6e6", fg="#d63384").pack(pady=5)
 
     root.mainloop()
 
