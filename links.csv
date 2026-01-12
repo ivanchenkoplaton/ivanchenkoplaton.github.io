@@ -1,5 +1,4 @@
 Title,Url,Type
-My GitHub,https://github.com,web
-My LinkedIn,https://linkedin.com,web
-Resume,./files/resume.pdf,file
-Project Video,https://youtube.com,video
+My Portfolio,https://github.com,web
+Resume,files/resume.pdf,file
+Demo Video,https://youtube.com,video

@@ -6,116 +6,84 @@
     <title>My Hub</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .container { width: 100%; max-width: 450px; text-align: center; }
-
-        /* Main Content - No Login Screen needed anymore */
-        #content-area { width: 100%; animation: fadeIn 0.5s ease-in; }
+        .container { width: 100%; max-width: 500px; text-align: center; }
         
         .header { margin-bottom: 30px; margin-top: 40px; }
         .profile-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #007bff; object-fit: cover; }
 
-        /* Link Cards */
         .link-card { 
             background: white; color: #333; text-decoration: none; 
-            padding: 18px; margin-bottom: 12px; border-radius: 10px; 
+            padding: 15px 20px; margin-bottom: 12px; border-radius: 10px; 
             display: flex; align-items: center; text-align: left;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; border-left: 5px solid transparent;
         }
-        .link-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); color: #007bff; }
-        .icon { font-size: 1.5rem; margin-right: 15px; }
-        .link-info { display: flex; flex-direction: column; }
-        .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: #888; }
-
-        /* Admin/Edit Button */
-        .admin-btn {
-            position: fixed; bottom: 30px; right: 30px;
-            background: #28a745; color: white; width: 60px; height: 60px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
-            text-decoration: none; transition: transform 0.2s;
-        }
-        .admin-btn:hover { transform: scale(1.1); background: #218838; }
-        .tooltip { position: absolute; right: 70px; background: #333; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; width: max-content; }
-        .admin-btn:hover .tooltip { display: block; }
+        .link-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-left: 5px solid #007bff; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .icon { font-size: 1.5rem; margin-right: 15px; width: 30px; text-align: center; }
+        .link-info { display: flex; flex-direction: column; overflow: hidden; }
+        .link-title { font-weight: 600; font-size: 1rem; }
+        .link-url { font-size: 0.75rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .type-file { border-left-color: #28a745; } /* Green for files */
+        .type-video { border-left-color: #dc3545; } /* Red for videos */
     </style>
 </head>
 <body>
 
-    <div id="content-area" class="container">
+    <div class="container">
         <div class="header">
-            <img src="https://via.placeholder.com/150" alt="Me" class="profile-img">
+            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img">
             <h2>My Links</h2>
         </div>
 
-        <div id="link-container">Loading links...</div>
-
-        <a href="#" id="edit-sheet-btn" class="admin-btn" target="_blank">
-            ✎
-            <div class="tooltip">Manage Links</div>
-        </a>
+        <div id="link-container">Loading...</div>
     </div>
 
     <script>
-        // === CONFIGURATION ===
-        
-        // PASTE YOUR GOOGLE SHEET "PUBLISHED" CSV LINK HERE:
-        const sheetCsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-..../pub?output=csv";
+        // Load the local CSV file
+        // We add a timestamp (?t=...) to prevent the browser from using old cached versions
+        fetch('./links.csv?t=' + new Date().getTime())
+        .then(response => response.text())
+        .then(csvText => {
+            const container = document.getElementById("link-container");
+            container.innerHTML = ""; 
+            
+            const rows = csvText.trim().split('\n');
+            
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip Header
+                if (!row.trim()) return; 
 
-        // PASTE THE LINK TO EDIT THE SHEET (For the green button):
-        const sheetEditUrl = "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit";
+                // CSV Parsing
+                const cols = row.split(',');
+                const title = cols[0].trim();
+                const url = cols[1].trim();
+                const type = cols[2] ? cols[2].trim().toLowerCase() : "web";
 
-        // =====================
+                // Icons & Styling
+                let icon = "🔗";
+                let extraClass = "";
 
-        // Initialize
-        document.getElementById("edit-sheet-btn").href = sheetEditUrl;
-        loadLinks();
+                if(type === 'file') { icon = "📂"; extraClass = "type-file"; }
+                if(type === 'video') { icon = "🎬"; extraClass = "type-video"; }
+                if(type === 'image') { icon = "🖼️"; extraClass = "type-file"; }
 
-        function loadLinks() {
-            fetch(sheetCsvUrl)
-            .then(response => response.text())
-            .then(csvText => {
-                const rows = csvText.split('\n');
-                const container = document.getElementById("link-container");
-                container.innerHTML = ""; 
-
-                rows.forEach((row, index) => {
-                    if (index === 0) return; // Skip Header Row
-                    if (!row.trim()) return; // Skip empty rows
-
-                    // Basic CSV parsing (handles simple commas)
-                    // Note: If your titles have commas, standard CSV parsing is needed.
-                    const cols = row.split(','); 
-                    
-                    // Clean up quotes if Google adds them
-                    const title = cols[0] ? cols[0].replace(/^"|"$/g, '').trim() : "Untitled";
-                    const url = cols[1] ? cols[1].replace(/^"|"$/g, '').trim() : "#";
-                    const type = cols[2] ? cols[2].replace(/^"|"$/g, '').trim() : "web";
-
-                    let icon = "🔗";
-                    if(type.toLowerCase().includes('file')) icon = "📂";
-                    if(type.toLowerCase().includes('video')) icon = "🎬";
-                    if(type.toLowerCase().includes('drive')) icon = "googledrive";
-
-                    const html = `
-                        <a href="${url}" class="link-card" target="_blank">
-                            <span class="icon">${icon}</span>
-                            <div class="link-info">
-                                <span class="link-title">${title}</span>
-                                <span class="link-url">${url}</span>
-                            </div>
-                        </a>
-                    `;
-                    container.innerHTML += html;
-                });
-            })
-            .catch(err => {
-                document.getElementById("link-container").innerHTML = "<p style='color:red'>Error loading links. <br>Check your Sheet URL.</p>";
-                console.error(err);
+                const html = `
+                    <a href="${url}" class="link-card ${extraClass}" target="_blank">
+                        <span class="icon">${icon}</span>
+                        <div class="link-info">
+                            <span class="link-title">${title}</span>
+                            <span class="link-url">${url}</span>
+                        </div>
+                    </a>
+                `;
+                container.innerHTML += html;
             });
-        }
+        })
+        .catch(err => {
+            document.getElementById("link-container").innerHTML = "Error loading links.csv";
+            console.error(err);
+        });
     </script>
 </body>
 </html>
