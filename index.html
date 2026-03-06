@@ -3,53 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platon Ivanchenko</title>
+    <title>Platon Ivanchenko | Terminal</title>
     
-    <link rel="icon" href="https://github.com/ivanchenkoplaton.png">
+    <link rel="icon" href="https://github.com/plat0802.png">
 
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        /* Dark Hacker Theme - Matches calendar.html */
+        body { 
+            font-family: 'Courier New', Courier, monospace; 
+            background: #0a0a0a; 
+            color: #00ff41; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
         .container { width: 100%; max-width: 500px; text-align: center; }
         
-        .header { margin-bottom: 20px; margin-top: 40px; }
+        .header { margin-bottom: 30px; margin-top: 40px; }
         
-        /* Updated Profile Image Style */
         .profile-img { 
             width: 110px; height: 110px; 
             border-radius: 50%; 
-            border: 4px solid white; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #00ff41; 
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
             object-fit: cover; 
-            background-color: white;
+            background-color: #000;
         }
 
+        h2 { text-transform: uppercase; letter-spacing: 2px; }
+
         /* Search & Filter Styles */
-        .controls { margin-bottom: 20px; }
+        .controls { margin-bottom: 30px; }
         #search-input {
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
-            font-size: 1rem; box-sizing: border-box; margin-bottom: 10px;
+            width: 100%; padding: 12px; 
+            background: #000; 
+            border: 1px solid #00ff41; 
+            color: #00ff41;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem; box-sizing: border-box; margin-bottom: 15px;
+            outline: none;
         }
+        #search-input::placeholder { color: rgba(0, 255, 65, 0.5); }
+
         .filter-btn {
-            background: #fff; border: 1px solid #ddd; padding: 6px 12px; 
-            border-radius: 20px; cursor: pointer; font-size: 0.9rem; margin: 2px;
-            transition: 0.2s;
+            background: #000; border: 1px solid #00ff41; padding: 6px 15px; 
+            color: #00ff41; border-radius: 0; cursor: pointer; font-size: 0.8rem; 
+            margin: 2px; transition: 0.3s; font-family: 'Courier New', monospace;
         }
-        .filter-btn:hover, .filter-btn.active { background: #007bff; color: white; border-color: #007bff; }
+        .filter-btn:hover, .filter-btn.active { 
+            background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; 
+        }
 
         /* Link Cards */
         .link-card { 
-            background: white; color: #333; text-decoration: none; 
-            padding: 15px 20px; margin-bottom: 12px; border-radius: 10px; 
+            background: #000; color: #00ff41; text-decoration: none; 
+            padding: 15px 20px; margin-bottom: 15px; border: 1px solid #333; 
             display: flex; align-items: center; text-align: left;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; border-left: 5px solid transparent;
+            transition: 0.3s; border-left: 4px solid #00ff41;
         }
-        .link-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-left: 5px solid #007bff; }
+        .link-card:hover { 
+            transform: scale(1.02); 
+            border-color: #00ff41;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); 
+        }
         
         .icon { font-size: 1.5rem; margin-right: 15px; width: 30px; text-align: center; }
         .link-info { display: flex; flex-direction: column; overflow: hidden; }
         .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* Keep functional colors but make them neon */
         .type-file { border-left-color: #28a745; } 
         .type-video { border-left-color: #dc3545; } 
     </style>
@@ -59,31 +87,31 @@
     <div class="container">
         <div class="header">
             <img src="https://github.com/plat0802.png" alt="Platon Ivanchenko" class="profile-img">
-            <h2>Platon Ivanchenko</h2>
+            <h2>> Platon Ivanchenko</h2>
         </div>
 
         <div class="controls">
-            <input type="text" id="search-input" placeholder="🔍 Search links...">
+            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Search links...">
             <div>
-                <button class="filter-btn active" onclick="filterLinks('all', this)">All</button>
-                <button class="filter-btn" onclick="filterLinks('web', this)">Web</button>
-                <button class="filter-btn" onclick="filterLinks('file', this)">Files</button>
-                <button class="filter-btn" onclick="filterLinks('video', this)">Videos</button>
+                <button class="filter-btn active" onclick="filterLinks('all', this)">ALL_LOGS</button>
+                <button class="filter-btn" onclick="filterLinks('web', this)">WEB</button>
+                <button class="filter-btn" onclick="filterLinks('file', this)">FILES</button>
+                <button class="filter-btn" onclick="filterLinks('video', this)">VIDEOS</button>
             </div>
         </div>
 
-        <div id="link-container">Loading...</div>
+        <div id="link-container">Initializing system...</div>
     </div>
 
     <script>
         let allLinks = [];
 
+        // Fetching from your existing links.csv
         fetch('./links.csv?t=' + new Date().getTime())
         .then(response => response.text())
         .then(csvText => {
             const rows = csvText.trim().split('\n');
-            const container = document.getElementById("link-container");
-            container.innerHTML = ""; 
+            allLinks = []; // Clear existing
             
             rows.forEach((row, index) => {
                 if (index === 0 || !row.trim()) return; 
@@ -104,11 +132,11 @@
             container.innerHTML = ""; 
             
             links.forEach(link => {
-                let icon = "🔗";
+                let icon = "迫";
                 let extraClass = "";
 
-                if(link.type === 'file') { icon = "📂"; extraClass = "type-file"; }
-                if(link.type === 'video') { icon = "🎬"; extraClass = "type-video"; }
+                if(link.type === 'file') { icon = "唐"; extraClass = "type-file"; }
+                if(link.type === 'video') { icon = "汐"; extraClass = "type-video"; }
 
                 const html = `
                     <a href="${link.url}" class="link-card ${extraClass}" target="_blank">
