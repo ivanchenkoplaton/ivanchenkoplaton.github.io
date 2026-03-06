@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Calendar | Terminal</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #00ff41; /* Classic Matrix/Hacker Green */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
 
+        .terminal-header {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #00ff41;
+            padding-bottom: 5px;
+        }
+
+        .calendar-container {
+            border: 2px solid #333;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Responsive iframe wrapper */
+        iframe {
+            max-width: 100%;
+            filter: invert(90%) hue-rotate(180deg) brightness(1.2); /* Inverts colors to create a dark mode look for the iframe */
+        }
+
+        .back-link {
+            margin-top: 20px;
+            color: #00ff41;
+            text-decoration: none;
+            border: 1px solid #00ff41;
+            padding: 10px 20px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 15px #00ff41;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-header">
+        <p>> access_directory: /root/calendar</p>
+        <p>> status: online</p>
+    </div>
+
+    <div class="calendar-container">
+        <iframe src="https://calendar.google.com/calendar/embed?src=417404f2da7f13170de53ff8798e142f8a49c68c197430fd6df1a290656a64a1%40group.calendar.google.com&ctz=Europe%2FBerlin" 
+                style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+
+    <a href="index.html" class="back-link">RETURN TO TERMINAL</a>
+</body>
+</html>
