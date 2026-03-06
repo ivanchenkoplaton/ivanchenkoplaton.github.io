@@ -1,34 +1,26 @@
-name: Add New Link to CSV
+name: Remote CSV Update
 on:
-  issues:
-    types: [opened]
+  repository_dispatch:
+    types: [add_new_link]
 
 jobs:
-  add-link:
-    if: contains(github.event.issue.labels.*.name, 'new-link')
+  update-csv:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Parse Issue and Update CSV
+      - name: Append Data
         run: |
-          # Extracting data from issue body (expects: Title, URL, Type)
-          # Format: Title | URL | Type
-          RAW_DATA="${{ github.event.issue.body }}"
-          CLEAN_DATA=$(echo "$RAW_DATA" | tr -d '\r' | tr '|' ',')
-          
-          echo "$CLEAN_DATA" >> links.csv
+          # The data comes from the "client_payload" sent by your website
+          echo "${{ github.event.client_payload.line }}" >> links.csv
           
       - name: Commit and Push
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "system-bot"
+          git config --global user.email "bot@github.com"
           git add links.csv
-          git commit -m "System auto-update: Added new log from Issue #${{ github.event.issue.number }}"
+          git commit -m "Remote update: ${{ github.event.client_payload.title }}"
           git push
-      
-      - name: Close Issue
-        run: gh issue close ${{ github.event.issue.number }} --comment "Log successfully integrated into system."
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
