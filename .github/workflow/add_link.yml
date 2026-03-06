@@ -1,0 +1,34 @@
+name: Add New Link to CSV
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-link:
+    if: contains(github.event.issue.labels.*.name, 'new-link')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Parse Issue and Update CSV
+        run: |
+          # Extracting data from issue body (expects: Title, URL, Type)
+          # Format: Title | URL | Type
+          RAW_DATA="${{ github.event.issue.body }}"
+          CLEAN_DATA=$(echo "$RAW_DATA" | tr -d '\r' | tr '|' ',')
+          
+          echo "$CLEAN_DATA" >> links.csv
+          
+      - name: Commit and Push
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add links.csv
+          git commit -m "System auto-update: Added new log from Issue #${{ github.event.issue.number }}"
+          git push
+      
+      - name: Close Issue
+        run: gh issue close ${{ github.event.issue.number }} --comment "Log successfully integrated into system."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
