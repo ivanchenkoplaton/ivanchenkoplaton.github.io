@@ -59,6 +59,36 @@
             background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; 
         }
 
+        /* Modal/Form Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            background-color: #000;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #00ff41;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 0 20px #00ff41;
+            text-align: left;
+        }
+        .modal-content h3 { margin-top: 0; color: #00ff41; }
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #000;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            box-sizing: border-box;
+        }
+
         /* Link Cards */
         .link-card { 
             background: #000; color: #00ff41; text-decoration: none; 
@@ -97,10 +127,29 @@
                 <button class="filter-btn" onclick="filterLinks('web', this)">WEB</button>
                 <button class="filter-btn" onclick="filterLinks('file', this)">FILES</button>
                 <button class="filter-btn" onclick="filterLinks('video', this)">VIDEOS</button>
+                <button class="filter-btn" style="border-color: #00ff41; color: #fff;" onclick="openModal()">+ NEW_LOG</button>
             </div>
         </div>
 
         <div id="link-container">Initializing system...</div>
+    </div>
+
+    <div id="entryModal" class="modal">
+        <div class="modal-content">
+            <h3>[GENERATE_NEW_ENTRY]</h3>
+            <input type="text" id="new-title" placeholder="Title">
+            <input type="text" id="new-url" placeholder="URL">
+            <select id="new-type">
+                <option value="web">WEB</option>
+                <option value="file">FILE</option>
+                <option value="video">VIDEO</option>
+            </select>
+            <div style="display: flex; gap: 10px;">
+                <button class="filter-btn" onclick="generateCSV()">GENERATE</button>
+                <button class="filter-btn" onclick="closeModal()">CANCEL</button>
+            </div>
+            <div id="output-csv" style="margin-top:15px; font-size: 0.8rem; word-break: break-all;"></div>
+        </div>
     </div>
 
     <script>
@@ -132,11 +181,11 @@
             container.innerHTML = ""; 
             
             links.forEach(link => {
-                let icon = "迫";
+                let icon = "🌐";
                 let extraClass = "";
 
-                if(link.type === 'file') { icon = "唐"; extraClass = "type-file"; }
-                if(link.type === 'video') { icon = "汐"; extraClass = "type-video"; }
+                if(link.type === 'file') { icon = "📁"; extraClass = "type-file"; }
+                if(link.type === 'video') { icon = "🎬"; extraClass = "type-video"; }
 
                 const html = `
                     <a href="${link.url}" class="link-card ${extraClass}" target="_blank">
@@ -170,6 +219,44 @@
             } else {
                 const filtered = allLinks.filter(link => link.type === type);
                 renderLinks(filtered);
+            }
+        }
+
+        // Modal Logic
+        function openModal() {
+            document.getElementById("entryModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("entryModal").style.display = "none";
+            document.getElementById("output-csv").innerText = "";
+        }
+
+        function generateCSV() {
+            const title = document.getElementById("new-title").value;
+            const url = document.getElementById("new-url").value;
+            const type = document.getElementById("new-type").value;
+
+            if (!title || !url) return alert("Please fill all fields.");
+
+            // Format matches the CSV header: Title,Url,Type
+            const csvLine = `${title},${url},${type}`;
+            
+            document.getElementById("output-csv").innerHTML = `
+                <p>Copy this line to links.csv:</p>
+                <code style="background:#222; padding:5px; display:block; border: 1px solid #00ff41;">${csvLine}</code>
+            `;
+
+            // Preview the addition immediately in the UI
+            allLinks.push({ title, url, type });
+            renderLinks(allLinks);
+        }
+
+        // Close modal if clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById("entryModal");
+            if (event.target == modal) {
+                closeModal();
             }
         }
     </script>
