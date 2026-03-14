@@ -63,11 +63,15 @@
         </div>
         <div class="controls">
             <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Search links...">
-            <div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
                 <button class="filter-btn active" onclick="filterLinks('all', this)">ALL_LOGS</button>
-                <button class="filter-btn" onclick="filterLinks('web', this)">WEB</button>
-                <button class="filter-btn" onclick="filterLinks('file', this)">FILES</button>
-                <button class="filter-btn" onclick="filterLinks('video', this)">VIDEOS</button>
+                <button class="filter-btn" onclick="filterLinks('dev', this)">DEV</button>
+                <button class="filter-btn" onclick="filterLinks('ai', this)">AI</button>
+                <button class="filter-btn" onclick="filterLinks('storage', this)">STORAGE</button>
+                <button class="filter-btn" onclick="filterLinks('media', this)">MEDIA</button>
+                <button class="filter-btn" onclick="filterLinks('shop', this)">SHOP</button>
+                <button class="filter-btn" onclick="filterLinks('edu', this)">EDU</button>
+                <button class="filter-btn" onclick="filterLinks('util', this)">UTIL</button>
             </div>
         </div>
         <div id="link-container">Initializing system...</div>

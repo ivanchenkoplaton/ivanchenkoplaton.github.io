@@ -1,7 +1,11 @@
 Title,Url,Type
-Gemini,https://gemini.google.com,web
-OneDrive,https://onedrive.live.com,web
-YouTube Music,https://music.youtube.com,web
-GitHub,https://github.com,web
-CS50x 2026,https://cs50.harvard.edu/x/2026,web
-Event Calendar,calendar.html,web
+Gemini,https://gemini.google.com,ai
+GitHub,https://github.com,dev
+CS50x 2026,https://cs50.harvard.edu/x/2026,edu
+OneDrive,https://onedrive.live.com,storage
+GoFile,https://gofile.io,storage
+YouTube Music,https://music.youtube.com,media
+Steam,https://store.steampowered.com,media
+Temu,https://www.temu.com,shop
+MediaMarkt,https://www.mediamarkt.de,shop
+Event Calendar,calendar.html,util
