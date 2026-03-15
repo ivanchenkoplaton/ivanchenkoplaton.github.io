@@ -6,12 +6,12 @@
     <title>Platon Ivanchenko | Terminal</title>
     <link rel="icon" href="https://github.com/plat0802.png">
     <style>
-        /* Previous styles remain the same */
         body { 
             font-family: 'Courier New', Courier, monospace; 
             background: #0a0a0a; color: #00ff41; 
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; margin: 0; padding: 20px; 
+            position: relative;
         }
         .container { width: 100%; max-width: 500px; text-align: center; }
         .header { margin-bottom: 30px; margin-top: 40px; }
@@ -53,12 +53,80 @@
         .link-info { display: flex; flex-direction: column; overflow: hidden; }
         .link-title { font-weight: 600; font-size: 1rem; }
         .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Right Side Personal Accounts Bar */
+        .social-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            z-index: 1000;
+        }
+        .social-sidebar a {
+            display: flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; transition: 0.3s; opacity: 0.7;
+        }
+        .social-sidebar a:hover {
+            transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #00ff41);
+        }
+        .social-sidebar img {
+            width: 24px; height: 24px; border-radius: 4px;
+        }
+
+        /* Adjust social sidebar for mobile devices */
+        @media (max-width: 800px) {
+            .social-sidebar {
+                position: static;
+                flex-direction: row;
+                transform: none;
+                justify-content: center;
+                margin-top: -10px;
+                margin-bottom: 20px;
+                width: 100%;
+                background: none;
+                border: none;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <div class="social-sidebar">
+        <a href="https://instagram.com/ivanchenkoplaton" title="Instagram" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta">
+        </a>
+        <a href="https://www.snapchat.com/add/ivanchenkoplat?share_id=I7eU0PXFrIY&locale=de-DE" title="Snapchat" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=snapchat.com" alt="Snap">
+        </a>
+        <a href="https://t.me/ivanchenkoplaton" title="Telegram" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG">
+        </a>
+        <a href="https://github.com/ivanchenkoplaton" title="GitHub" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH">
+        </a>
+        <a href="https://discord.gg/Y3y85FMq" title="Discord" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=discord.com" alt="DC">
+        </a>
+        <a href="mailto:pton882288@gmail.com" title="Email">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail">
+        </a>
+        <a href="https://steamcommunity.com/id/platononsteam/" title="Steam" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com" alt="Steam">
+        </a>
+    </div>
+
     <div class="container">
         <div class="header">
-            <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="profile-img">
+            <img src="https://github.com/plat0802.png" alt="Platon Ivanchenko" class="profile-img">
             <h2>> Platon Ivanchenko</h2>
         </div>
         <div class="controls">
@@ -76,7 +144,7 @@
         </div>
         <div id="link-container">Initializing system...</div>
     </div>
-    <div class="version-tag">SYS_VER: 1.1.1</div>
+    <div class="version-tag">SYS_VER: 1.1.2</div>
 
     <script>
         let allLinks = [];
@@ -100,12 +168,11 @@
             links.forEach(l => {
                 let iconContent;
                 
-                if (l.type === 'file') {
-                    iconContent = "📁";
-                } else if (l.type === 'video') {
-                    iconContent = "🎬";
+                if (l.type === 'storage') {
+                    iconContent = "☁️";
+                } else if (l.type === 'util') {
+                    iconContent = "📅"; // Event Calendar
                 } else {
-                    // Fetch favicon for web links
                     const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
                     iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.parentElement.innerHTML='🌐'">`;
                 }
@@ -126,6 +193,21 @@
             b.classList.add('active');
             renderLinks(t === 'all' ? allLinks : allLinks.filter(l => l.type === t));
         }
+
+        // Search Bar Functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const activeType = document.querySelector('.filter-btn.active').innerText.toLowerCase();
+            
+            let filtered = allLinks.filter(l => l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query));
+            
+            if (activeType !== 'all_logs') {
+                const typeMap = { 'dev': 'dev', 'ai': 'ai', 'storage': 'storage', 'media': 'media', 'shop': 'shop', 'edu': 'edu', 'util': 'util' };
+                filtered = filtered.filter(l => l.type === typeMap[activeType]);
+            }
+            
+            renderLinks(filtered);
+        });
         
         fetchLinks();
     </script>
