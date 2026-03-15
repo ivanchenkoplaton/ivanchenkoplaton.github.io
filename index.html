@@ -6,122 +6,135 @@
     <title>Platon Ivanchenko | Terminal</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
     <style>
+        :root {
+            --term-green: #00ff41;
+            --term-dim: rgba(0, 255, 65, 0.5);
+            --bg-black: #0a0a0a;
+        }
+
         body { 
             font-family: 'Courier New', Courier, monospace; 
-            background: #0a0a0a; color: #00ff41; 
-            display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; margin: 0; padding: 20px; 
+            background: var(--bg-black); 
+            color: var(--term-green); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
             position: relative;
+            overflow-x: hidden;
         }
-        .container { width: 100%; max-width: 500px; text-align: center; }
-        .header { margin-bottom: 30px; margin-top: 40px; }
+
+        /* CRT Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 2000;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container { width: 100%; max-width: 600px; text-align: center; z-index: 10; }
+        
+        /* Blinking Cursor Animation */
+        .header h2::after {
+            content: "_";
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
         .profile-img { 
             width: 110px; height: 110px; border-radius: 50%; 
-            border: 2px solid #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+            border: 2px solid var(--term-green); 
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
             object-fit: cover; background-color: #000;
-        }
-        h2 { text-transform: uppercase; letter-spacing: 2px; }
-        .controls { margin-bottom: 30px; }
-        #search-input {
-            width: 100%; padding: 12px; background: #000; border: 1px solid #00ff41; 
-            color: #00ff41; border-radius: 4px; font-family: 'Courier New', monospace;
-            font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; outline: none;
-        }
-        .filter-btn {
-            background: #000; border: 1px solid #00ff41; padding: 6px 15px; 
-            color: #00ff41; border-radius: 0; cursor: pointer; font-size: 0.8rem; 
-            margin: 2px; transition: 0.3s; font-family: 'Courier New', monospace;
-        }
-        .filter-btn:hover, .filter-btn.active { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
-        .version-tag {
-            position: fixed; bottom: 15px; right: 15px; font-size: 0.7rem;
-            color: rgba(0, 255, 65, 0.5); background: rgba(0, 0, 0, 0.8);
-            padding: 5px 10px; border: 1px solid #333; pointer-events: none;
-        }
-        .link-card { 
-            background: #000; color: #00ff41; text-decoration: none; 
-            padding: 15px 20px; margin-bottom: 15px; border: 1px solid #333; 
-            display: flex; align-items: center; text-align: left;
-            transition: 0.3s; border-left: 4px solid #00ff41;
-        }
-        .link-card:hover { transform: scale(1.02); border-color: #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
-        .icon { 
-            font-size: 1.5rem; margin-right: 15px; width: 30px; 
-            height: 30px; display: flex; align-items: center; justify-content: center;
-        }
-        .favicon-img { width: 24px; height: 24px; border-radius: 4px; }
-        .link-info { display: flex; flex-direction: column; overflow: hidden; }
-        .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* Right Side Personal Accounts Bar */
-        .social-sidebar {
-            position: fixed;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
-            border: 1px solid #00ff41;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-            z-index: 1000;
-            align-items: center;
-        }
-        
-        /* New Label Style */
-        .sidebar-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
             margin-bottom: 10px;
-            color: rgba(0, 255, 65, 0.7);
-            letter-spacing: 2px;
-            border-bottom: 1px solid #00ff41;
-            padding-bottom: 5px;
-            white-space: nowrap;
         }
 
-        .social-sidebar a {
-            display: flex; align-items: center; justify-content: center;
-            width: 30px; height: 30px; transition: 0.3s; opacity: 0.7;
-        }
-        .social-sidebar a:hover {
-            transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #00ff41);
-        }
-        .social-sidebar img {
-            width: 24px; height: 24px; border-radius: 4px;
+        #search-input {
+            width: 100%; padding: 15px; background: #000; 
+            border: 1px solid var(--term-green); 
+            color: var(--term-green); border-radius: 0; 
+            font-family: 'Courier New', monospace;
+            font-size: 1rem; box-sizing: border-box; 
+            margin-bottom: 20px; outline: none;
+            box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
         }
 
-        /* Adjust social sidebar for mobile devices */
-        @media (max-width: 800px) {
+        .filter-btn {
+            background: transparent; border: 1px solid var(--term-dim); 
+            padding: 8px 12px; color: var(--term-dim); 
+            cursor: pointer; font-size: 0.75rem; 
+            transition: 0.2s; font-family: 'Courier New', monospace;
+        }
+
+        .filter-btn:hover, .filter-btn.active { 
+            background: var(--term-green); 
+            color: #000; 
+            border-color: var(--term-green);
+            box-shadow: 0 0 15px var(--term-green); 
+        }
+
+        .link-card { 
+            background: rgba(0, 0, 0, 0.6); color: var(--term-green); 
+            text-decoration: none; padding: 15px; margin-bottom: 12px; 
+            border: 1px solid #222; display: flex; align-items: center; 
+            text-align: left; transition: 0.3s; border-left: 4px solid var(--term-dim);
+        }
+
+        .link-card:hover { 
+            transform: translateX(10px); 
+            border-color: var(--term-green); 
+            border-left-width: 8px;
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .icon { font-size: 1.5rem; margin-right: 15px; min-width: 30px; text-align: center; }
+        .favicon-img { width: 24px; height: 24px; border-radius: 2px; filter: grayscale(1) brightness(1.5); }
+        .link-info { display: flex; flex-direction: column; overflow: hidden; }
+        .link-title { font-weight: bold; font-size: 1rem; text-transform: uppercase; }
+        .link-url { font-size: 0.7rem; color: var(--term-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Enhanced Sidebar */
+        .social-sidebar {
+            position: fixed; right: 25px; top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; background: rgba(0, 0, 0, 0.9); padding: 20px 10px;
+            border: 1px solid var(--term-dim); border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); z-index: 1000;
+        }
+
+        .sidebar-label {
+            font-size: 0.6rem; font-weight: bold; letter-spacing: 3px;
+            writing-mode: vertical-rl; transform: rotate(180deg);
+            color: var(--term-green); padding-bottom: 15px;
+            border-bottom: 1px solid var(--term-dim); margin-bottom: 5px;
+        }
+
+        .social-sidebar a { opacity: 0.6; transition: 0.3s; }
+        .social-sidebar a:hover { opacity: 1; transform: scale(1.2); filter: drop-shadow(0 0 5px var(--term-green)); }
+
+        .version-tag {
+            position: fixed; bottom: 15px; right: 15px; font-size: 0.6rem;
+            color: var(--term-dim); opacity: 0.5;
+        }
+
+        @media (max-width: 900px) {
             .social-sidebar {
-                position: static;
-                flex-direction: row;
-                transform: none;
-                justify-content: center;
-                margin-top: -10px;
-                margin-bottom: 20px;
-                width: 100%;
-                background: none;
-                border: none;
-                box-shadow: none;
+                position: static; flex-direction: row; transform: none;
+                margin: 20px 0; width: 100%; justify-content: center;
+                border: none; background: none;
             }
             .sidebar-label {
-                writing-mode: horizontal-tb;
-                transform: none;
-                margin-bottom: 0;
-                margin-right: 15px;
-                border-bottom: none;
-                border-right: 1px solid #00ff41;
-                padding-bottom: 0;
-                padding-right: 10px;
-                display: flex;
-                align-items: center;
+                writing-mode: horizontal-tb; transform: none;
+                padding-bottom: 0; border-bottom: none; border-right: 1px solid var(--term-dim);
+                padding-right: 10px; margin-bottom: 0;
             }
         }
     </style>
@@ -129,38 +142,31 @@
 <body>
 
     <div class="social-sidebar">
-        <div class="sidebar-label">PERSONAL_LOGS</div>
+        <div class="sidebar-label">> AUTH_USER_NODES</div>
         <a href="https://instagram.com/ivanchenkoplaton" title="Instagram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta">
-        </a>
-        <a href="https://www.snapchat.com/add/ivanchenkoplat?share_id=I7eU0PXFrIY&locale=de-DE" title="Snapchat" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=snapchat.com" alt="Snap">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta" class="favicon-img">
         </a>
         <a href="https://t.me/ivanchenkoplaton" title="Telegram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG" class="favicon-img">
         </a>
         <a href="https://github.com/ivanchenkoplaton" title="GitHub" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH">
-        </a>
-        <a href="https://discord.gg/Y3y85FMq" title="Discord" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=discord.com" alt="DC">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH" class="favicon-img">
         </a>
         <a href="mailto:pton882288@gmail.com" title="Email">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail">
-        </a>
-        <a href="https://steamcommunity.com/id/platononsteam/" title="Steam" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com" alt="Steam">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail" class="favicon-img">
         </a>
     </div>
 
     <div class="container">
         <div class="header">
             <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="profile-img">
-            <h2>> Platon Ivanchenko</h2>
+            <h2>> PLATON_IVANCHENKO</h2>
+            <p style="font-size: 0.8rem; color: var(--term-dim);">LOCATION: Kirchentellinsfurt, DE | STATUS: ACTIVE</p>
         </div>
+
         <div class="controls">
-            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Search links...">
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
+            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: input command...">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
                 <button class="filter-btn active" onclick="filterLinks('all', this)">ALL_LOGS</button>
                 <button class="filter-btn" onclick="filterLinks('dev', this)">DEV</button>
                 <button class="filter-btn" onclick="filterLinks('ai', this)">AI</button>
@@ -171,9 +177,11 @@
                 <button class="filter-btn" onclick="filterLinks('util', this)">UTIL</button>
             </div>
         </div>
-        <div id="link-container">Initializing system...</div>
+
+        <div id="link-container" style="margin-top: 30px;">Initializing system components...</div>
     </div>
-    <div class="version-tag">SYS_VER: 1.1.2</div>
+
+    <div class="version-tag">STABLE_BUILD: 1.2.0 [PROD]</div>
 
     <script>
         let allLinks = [];
@@ -196,12 +204,9 @@
             container.innerHTML = ""; 
             links.forEach(l => {
                 let iconContent;
-                
-                if (l.type === 'storage') {
-                    iconContent = "☁️";
-                } else if (l.type === 'util') {
-                    iconContent = "📅"; // Event Calendar
-                } else {
+                if (l.type === 'storage') iconContent = "☁️";
+                else if (l.type === 'util') iconContent = "📅";
+                else {
                     const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
                     iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.parentElement.innerHTML='🌐'">`;
                 }
@@ -223,18 +228,9 @@
             renderLinks(t === 'all' ? allLinks : allLinks.filter(l => l.type === t));
         }
 
-        // Search Bar Functionality
         document.getElementById('search-input').addEventListener('input', function(e) {
             const query = e.target.value.toLowerCase();
-            const activeType = document.querySelector('.filter-btn.active').innerText.toLowerCase();
-            
-            let filtered = allLinks.filter(l => l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query));
-            
-            if (activeType !== 'all_logs') {
-                const typeMap = { 'dev': 'dev', 'ai': 'ai', 'storage': 'storage', 'media': 'media', 'shop': 'shop', 'edu': 'edu', 'util': 'util' };
-                filtered = filtered.filter(l => l.type === typeMap[activeType]);
-            }
-            
+            const filtered = allLinks.filter(l => l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query));
             renderLinks(filtered);
         });
         
