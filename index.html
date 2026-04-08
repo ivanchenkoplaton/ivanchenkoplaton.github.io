@@ -80,6 +80,44 @@
         .link-title { font-weight: 600; font-size: 1rem; }
         .link-url { font-size: 0.75rem; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
+        /* App Icons Row */
+        .apps-row {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        .app-icon-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+        }
+        .app-icon-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--text-color);
+            box-shadow: 2px 2px 0 var(--text-color);
+        }
+        .app-icon-card img { width: 24px; height: 24px; }
+        .app-tooltip {
+            position: absolute; bottom: -22px; background: var(--text-color);
+            color: var(--bg-color); font-size: 0.6rem; padding: 2px 6px;
+            border-radius: 0; opacity: 0; pointer-events: none;
+            transition: opacity 0.2s; white-space: nowrap;
+            font-weight: bold; text-transform: uppercase; z-index: 10;
+        }
+        .app-icon-card:hover .app-tooltip { opacity: 1; }
+
         /* Right Side Personal Accounts Bar */
         .social-sidebar {
             position: fixed;
@@ -212,6 +250,7 @@
         <div class="controls">
             <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Type shortcut & press Enter...">
         </div>
+        <div id="apps-container" class="apps-row"></div>
         <div id="link-container">Initializing system...</div>
     </div>
     <div class="version-tag">SYS_VER: Alpha_1.2</div>
@@ -222,12 +261,22 @@
             { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp' },
             { title: 'GitHub', url: 'https://github.com', shortcut: 'gh' },
             { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs' },
-            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od' },
+            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od', isApp: true },
             { title: 'GoFile', url: 'https://gofile.io', shortcut: 'gf' },
             { title: 'YouTube Music', url: 'https://music.youtube.com', shortcut: 'ym' },
             { title: 'Steam', url: 'https://store.steampowered.com', shortcut: 'st' },
             { title: 'Event Calendar', url: 'calendar.html', shortcut: 'cal' },
-            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm' }
+            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm', isApp: true },
+            { title: 'YouTube', url: 'https://www.youtube.com', shortcut: 'yt', isApp: true },
+            { title: 'Outlook', url: 'https://outlook.live.com', shortcut: 'out', isApp: true },
+            { title: 'Google Drive', url: 'https://drive.google.com', shortcut: 'gd', isApp: true },
+            { title: 'Google Docs', url: 'https://docs.google.com', shortcut: 'doc', isApp: true },
+            { title: 'Google Sheets', url: 'https://docs.google.com/spreadsheets', shortcut: 'sht', isApp: true },
+            { title: 'Google Slides', url: 'https://docs.google.com/presentation', shortcut: 'sld', isApp: true },
+            { title: 'Microsoft Word', url: 'https://www.office.com/launch/word', shortcut: 'mwd', isApp: true },
+            { title: 'Microsoft Excel', url: 'https://www.office.com/launch/excel', shortcut: 'mxl', isApp: true },
+            { title: 'Microsoft PowerPoint', url: 'https://www.office.com/launch/powerpoint', shortcut: 'mpt', isApp: true },
+            { title: 'Microsoft Teams', url: 'https://teams.microsoft.com', shortcut: 'tm', isApp: true }
         ];
 
         function updateView() {
@@ -242,12 +291,33 @@
 
         function renderLinks(links) {
             const container = document.getElementById("link-container");
+            const appsContainer = document.getElementById("apps-container");
+            
             if (links.length === 0) {
                 container.innerHTML = "<p>[SYSTEM]: No records match current parameters.</p>";
+                if (appsContainer) appsContainer.innerHTML = "";
                 return;
             }
             
-            container.innerHTML = links.map(l => {
+            const standardLinks = links.filter(l => !l.isApp);
+            const appLinks = links.filter(l => l.isApp);
+            
+            if (appsContainer) {
+                if (appLinks.length > 0) {
+                    appsContainer.innerHTML = appLinks.map(l => {
+                        let faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
+                        return `
+                            <a href="${l.url}" class="app-icon-card" title="${l.title}">
+                                <img src="${faviconUrl}" alt="${l.title}" onerror="this.outerHTML='🌐'">
+                                <span class="app-tooltip">${l.shortcut}</span>
+                            </a>`;
+                    }).join('');
+                } else {
+                    appsContainer.innerHTML = '';
+                }
+            }
+            
+            container.innerHTML = standardLinks.map(l => {
                 let iconContent = "🌐";
                 if (l.shortcut === 'cal') {
                     iconContent = "📅"; // Event Calendar
