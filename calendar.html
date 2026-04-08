@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Calendar | Terminal</title>
     <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #00ff41;
+            --border-color: #333;
+            --hover-shadow: rgba(0, 255, 65, 0.2);
+            --font-main: 'Courier New', Courier, monospace;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #00ff41; 
-            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color); 
+            font-family: var(--font-main);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,37 +29,47 @@
         .terminal-header {
             width: 100%;
             max-width: 800px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #00ff41;
-            padding-bottom: 5px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--text-color);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
         }
 
+        .terminal-header p { margin: 5px 0; }
+
         .calendar-container {
-            border: 2px solid #333;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            border: 1px solid var(--text-color);
+            box-shadow: 0 0 20px var(--hover-shadow);
             border-radius: 8px;
             overflow: hidden;
             background: #000;
+            width: 100%;
+            max-width: 800px;
         }
 
         iframe {
             max-width: 100%;
+            width: 100%;
             filter: invert(90%) hue-rotate(180deg) brightness(1.2); 
+            display: block;
         }
 
         .back-link {
-            margin-top: 20px;
-            color: #00ff41;
+            margin-top: 25px;
+            color: var(--text-color);
             text-decoration: none;
-            border: 1px solid #00ff41;
+            border: 1px solid var(--text-color);
             padding: 10px 20px;
             transition: all 0.3s;
+            border-radius: 4px;
         }
 
         .back-link:hover {
-            background: #00ff41;
+            background: var(--text-color);
             color: #000;
-            box-shadow: 0 0 15px #00ff41;
+            box-shadow: 0 0 15px var(--text-color);
+            transform: translateY(-2px);
         }
     </style>
 </head>

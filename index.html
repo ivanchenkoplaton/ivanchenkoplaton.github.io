@@ -6,45 +6,64 @@
     <title>Platon Ivanchenko | Terminal</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
     <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #00ff41;
+            --border-color: #333;
+            --hover-shadow: rgba(0, 255, 65, 0.3);
+            --font-main: 'Courier New', Courier, monospace;
+        }
         body { 
-            font-family: 'Courier New', Courier, monospace; 
-            background: #0a0a0a; color: #00ff41; 
+            font-family: var(--font-main); 
+            background: var(--bg-color); color: var(--text-color); 
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; margin: 0; padding: 20px; 
             position: relative;
         }
-        .container { width: 100%; max-width: 500px; text-align: center; }
+        .container { width: 100%; max-width: 800px; text-align: center; } /* Widened for Grid */
         .header { margin-bottom: 30px; margin-top: 40px; }
         .profile-img { 
             width: 110px; height: 110px; border-radius: 50%; 
-            border: 2px solid #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+            border: 2px solid var(--text-color); box-shadow: 0 0 15px var(--hover-shadow);
             object-fit: cover; background-color: #000;
         }
         h2 { text-transform: uppercase; letter-spacing: 2px; }
         .controls { margin-bottom: 30px; }
         #search-input {
-            width: 100%; padding: 12px; background: #000; border: 1px solid #00ff41; 
-            color: #00ff41; border-radius: 4px; font-family: 'Courier New', monospace;
+            width: 100%; padding: 12px; background: #000; border: 1px solid var(--text-color); 
+            color: var(--text-color); border-radius: 4px; font-family: var(--font-main);
             font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; outline: none;
+            transition: box-shadow 0.3s ease;
+        }
+        #search-input:focus {
+            box-shadow: 0 0 10px var(--hover-shadow);
         }
         .filter-btn {
-            background: #000; border: 1px solid #00ff41; padding: 6px 15px; 
-            color: #00ff41; border-radius: 0; cursor: pointer; font-size: 0.8rem; 
-            margin: 2px; transition: 0.3s; font-family: 'Courier New', monospace;
+            background: #000; border: 1px solid var(--text-color); padding: 6px 15px; 
+            color: var(--text-color); border-radius: 0; cursor: pointer; font-size: 0.8rem; 
+            margin: 2px; transition: 0.3s; font-family: var(--font-main);
         }
-        .filter-btn:hover, .filter-btn.active { background: #00ff41; color: #000; box-shadow: 0 0 10px #00ff41; }
+        .filter-btn:hover, .filter-btn.active { background: var(--text-color); color: #000; box-shadow: 0 0 10px var(--text-color); }
+        #link-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            text-align: left;
+        }
         .version-tag {
             position: fixed; bottom: 15px; right: 15px; font-size: 0.7rem;
             color: rgba(0, 255, 65, 0.5); background: rgba(0, 0, 0, 0.8);
-            padding: 5px 10px; border: 1px solid #333; pointer-events: none;
+            padding: 5px 10px; border: 1px solid var(--border-color); pointer-events: none;
+            z-index: 1000;
         }
         .link-card { 
-            background: #000; color: #00ff41; text-decoration: none; 
-            padding: 15px 20px; margin-bottom: 15px; border: 1px solid #333; 
+            background: rgba(0, 0, 0, 0.6); color: var(--text-color); text-decoration: none; 
+            padding: 15px 20px; border: 1px solid var(--border-color); 
             display: flex; align-items: center; text-align: left;
-            transition: 0.3s; border-left: 4px solid #00ff41;
+            transition: all 0.3s ease; border-left: 4px solid var(--text-color);
+            border-radius: 4px;
         }
-        .link-card:hover { transform: scale(1.02); border-color: #00ff41; box-shadow: 0 0 15px rgba(0, 255, 65, 0.2); }
+        .link-card:hover { transform: translateY(-3px); border-color: var(--text-color); box-shadow: 0 5px 15px var(--hover-shadow); }
         .icon { 
             font-size: 1.5rem; margin-right: 15px; width: 30px; 
             height: 30px; display: flex; align-items: center; justify-content: center;
@@ -52,7 +71,7 @@
         .favicon-img { width: 24px; height: 24px; border-radius: 4px; }
         .link-info { display: flex; flex-direction: column; overflow: hidden; }
         .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
         /* Right Side Personal Accounts Bar */
         .social-sidebar {
@@ -65,11 +84,12 @@
             gap: 15px;
             background: rgba(0, 0, 0, 0.8);
             padding: 15px;
-            border: 1px solid #00ff41;
+            border: 1px solid var(--text-color);
             border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 15px var(--hover-shadow);
             z-index: 1000;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         
         /* New Label Style */
@@ -81,7 +101,7 @@
             margin-bottom: 10px;
             color: rgba(0, 255, 65, 0.7);
             letter-spacing: 2px;
-            border-bottom: 1px solid #00ff41;
+            border-bottom: 1px solid var(--text-color);
             padding-bottom: 5px;
             white-space: nowrap;
         }
@@ -91,7 +111,7 @@
             width: 30px; height: 30px; transition: 0.3s; opacity: 0.7;
         }
         .social-sidebar a:hover {
-            transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #00ff41);
+            transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px var(--text-color));
         }
         .social-sidebar img {
             width: 24px; height: 24px; border-radius: 4px;
@@ -99,9 +119,11 @@
 
         /* Adjust social sidebar for mobile devices */
         @media (max-width: 800px) {
+            #link-container { grid-template-columns: 1fr; }
             .social-sidebar {
                 position: static;
                 flex-direction: row;
+                flex-wrap: wrap;
                 transform: none;
                 justify-content: center;
                 margin-top: -10px;
@@ -110,6 +132,7 @@
                 background: none;
                 border: none;
                 box-shadow: none;
+                backdrop-filter: none;
             }
             .sidebar-label {
                 writing-mode: horizontal-tb;
@@ -117,7 +140,7 @@
                 margin-bottom: 0;
                 margin-right: 15px;
                 border-bottom: none;
-                border-right: 1px solid #00ff41;
+                border-right: 1px solid var(--text-color);
                 padding-bottom: 0;
                 padding-right: 10px;
                 display: flex;
@@ -177,36 +200,58 @@
 
     <script>
         let allLinks = [];
+        let currentFilter = 'all';
 
-        function fetchLinks() {
-            fetch('./links.csv?t=' + new Date().getTime())
-            .then(res => res.text())
-            .then(csv => {
+        async function fetchLinks() {
+            try {
+                const res = await fetch('./links.csv?t=' + Date.now());
+                const csv = await res.text();
                 const rows = csv.trim().split('\n');
                 allLinks = rows.slice(1).map(r => {
                     const c = r.split(',');
-                    return { title: c[0].trim(), url: c[1].trim(), type: c[2]?.trim().toLowerCase() || "web" };
+                    return { 
+                        title: c[0]?.trim() || 'Unknown', 
+                        url: c[1]?.trim() || '#', 
+                        type: c[2]?.trim().toLowerCase() || "web" 
+                    };
                 });
-                renderLinks(allLinks);
+                updateView();
+            } catch (error) {
+                document.getElementById("link-container").innerHTML = "<p style='color:red;'>[ERROR] Failed to load system logs.</p>";
+            }
+        }
+
+        function updateView() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allLinks.filter(l => {
+                const matchesSearch = l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query);
+                const matchesType = currentFilter === 'all' || l.type === currentFilter;
+                return matchesSearch && matchesType;
             });
+            renderLinks(filtered);
         }
 
         function renderLinks(links) {
             const container = document.getElementById("link-container");
-            container.innerHTML = ""; 
-            links.forEach(l => {
-                let iconContent;
-                
+            if (links.length === 0) {
+                container.innerHTML = "<p>[SYSTEM]: No records match current parameters.</p>";
+                return;
+            }
+            
+            container.innerHTML = links.map(l => {
+                let iconContent = "🌐";
                 if (l.type === 'storage') {
                     iconContent = "☁️";
                 } else if (l.type === 'util') {
                     iconContent = "📅"; // Event Calendar
-                } else {
-                    const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
-                    iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.parentElement.innerHTML='🌐'">`;
+                } else if (l.url !== '#') {
+                    try {
+                        const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
+                        iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.outerHTML='🌐'">`;
+                    } catch(e) {}
                 }
 
-                container.innerHTML += `
+                return `
                     <a href="${l.url}" class="link-card">
                         <span class="icon">${iconContent}</span>
                         <div class="link-info">
@@ -214,29 +259,18 @@
                             <span class="link-url">${l.url}</span>
                         </div>
                     </a>`;
-            });
+            }).join('');
         }
 
         function filterLinks(t, b) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             b.classList.add('active');
-            renderLinks(t === 'all' ? allLinks : allLinks.filter(l => l.type === t));
+            currentFilter = t;
+            updateView();
         }
 
-        // Search Bar Functionality
-        document.getElementById('search-input').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            const activeType = document.querySelector('.filter-btn.active').innerText.toLowerCase();
-            
-            let filtered = allLinks.filter(l => l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query));
-            
-            if (activeType !== 'all_logs') {
-                const typeMap = { 'dev': 'dev', 'ai': 'ai', 'storage': 'storage', 'media': 'media', 'shop': 'shop', 'edu': 'edu', 'util': 'util' };
-                filtered = filtered.filter(l => l.type === typeMap[activeType]);
-            }
-            
-            renderLinks(filtered);
-        });
+        // Real-time Search Processing
+        document.getElementById('search-input').addEventListener('input', updateView);
         
         fetchLinks();
     </script>
