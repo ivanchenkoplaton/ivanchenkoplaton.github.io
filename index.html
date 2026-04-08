@@ -43,10 +43,27 @@
             transform: translate(-2px, -2px);
         }
         #link-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+        }
+        .link-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 15px;
             text-align: left;
+        }
+        .category-header {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            width: 100%;
+            text-align: left;
+            margin-bottom: -10px;
         }
         .version-tag {
             position: fixed; bottom: 15px; right: 15px; font-size: 0.7rem;
@@ -80,43 +97,69 @@
         .link-title { font-weight: 600; font-size: 1rem; }
         .link-url { font-size: 0.75rem; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
-        /* App Icons Row */
-        .apps-row {
+        /* App Sections and Categories */
+        .apps-section {
+            margin-top: 40px;
+            width: 100%;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .app-category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .app-category-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 5px;
+            width: 100%;
+            text-align: center;
+        }
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
             width: 100%;
         }
         .app-icon-card {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            width: 45px;
-            height: 45px;
+            width: 100%;
+            height: 50px;
             display: flex;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 0 15px;
+            box-sizing: border-box;
             border-radius: 8px;
             transition: all 0.3s ease;
             text-decoration: none;
-            position: relative;
+            gap: 12px;
         }
         .app-icon-card:hover {
             transform: translateY(-3px);
             border-color: var(--text-color);
             box-shadow: 2px 2px 0 var(--text-color);
         }
-        .app-icon-card img { width: 24px; height: 24px; }
-        .app-tooltip {
-            position: absolute; bottom: -22px; background: var(--text-color);
-            color: var(--bg-color); font-size: 0.6rem; padding: 2px 6px;
-            border-radius: 0; opacity: 0; pointer-events: none;
-            transition: opacity 0.2s; white-space: nowrap;
-            font-weight: bold; text-transform: uppercase; z-index: 10;
+        .app-icon-card img { width: 22px; height: 22px; }
+        .app-name {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+            letter-spacing: 0.5px;
         }
-        .app-icon-card:hover .app-tooltip { opacity: 1; }
 
         /* Right Side Personal Accounts Bar */
         .social-sidebar {
@@ -175,7 +218,8 @@
         /* Adjust social sidebar for mobile devices */
         @media (max-width: 800px) {
         .container { padding-right: 0; }
-            #link-container { grid-template-columns: 1fr; }
+            .link-grid { grid-template-columns: 1fr; }
+            .apps-grid { grid-template-columns: repeat(2, 1fr); }
             .social-sidebar {
                 position: static;
                 flex-direction: column;
@@ -250,33 +294,33 @@
         <div class="controls">
             <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Type shortcut & press Enter...">
         </div>
-        <div id="apps-container" class="apps-row"></div>
         <div id="link-container">Initializing system...</div>
+        <div id="apps-container" class="apps-section"></div>
     </div>
-    <div class="version-tag">SYS_VER: Alpha_1.2</div>
+    <div class="version-tag" id="sys-version">SYS_VER: Alpha_1.2</div>
 
     <script>
         let allLinks = [
-            { title: 'Gemini', url: 'https://gemini.google.com', shortcut: 'gem' },
-            { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp' },
-            { title: 'GitHub', url: 'https://github.com', shortcut: 'gh' },
-            { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs' },
-            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od', isApp: true },
+            { title: 'Gemini', url: 'https://gemini.google.com', shortcut: 'gem', isTop: true },
+            { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp', isTop: true },
+            { title: 'GitHub', url: 'https://github.com', shortcut: 'gh', isTop: true },
+            { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs', isTop: true },
+            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od', isApp: true, vendor: 'microsoft' },
             { title: 'GoFile', url: 'https://gofile.io', shortcut: 'gf' },
             { title: 'YouTube Music', url: 'https://music.youtube.com', shortcut: 'ym' },
-            { title: 'Steam', url: 'https://store.steampowered.com', shortcut: 'st' },
+            { title: 'Steam', url: 'https://store.steampowered.com', shortcut: 'st', isTop: true },
             { title: 'Event Calendar', url: 'calendar.html', shortcut: 'cal' },
-            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm', isApp: true },
-            { title: 'YouTube', url: 'https://www.youtube.com', shortcut: 'yt', isApp: true },
-            { title: 'Outlook', url: 'https://outlook.live.com', shortcut: 'out', isApp: true },
-            { title: 'Google Drive', url: 'https://drive.google.com', shortcut: 'gd', isApp: true },
-            { title: 'Google Docs', url: 'https://docs.google.com', shortcut: 'doc', isApp: true },
-            { title: 'Google Sheets', url: 'https://docs.google.com/spreadsheets', shortcut: 'sht', isApp: true },
-            { title: 'Google Slides', url: 'https://docs.google.com/presentation', shortcut: 'sld', isApp: true },
-            { title: 'Microsoft Word', url: 'https://www.office.com/launch/word', shortcut: 'mwd', isApp: true },
-            { title: 'Microsoft Excel', url: 'https://www.office.com/launch/excel', shortcut: 'mxl', isApp: true },
-            { title: 'Microsoft PowerPoint', url: 'https://www.office.com/launch/powerpoint', shortcut: 'mpt', isApp: true },
-            { title: 'Microsoft Teams', url: 'https://teams.microsoft.com', shortcut: 'tm', isApp: true }
+            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm', isApp: true, vendor: 'google' },
+            { title: 'YouTube', url: 'https://www.youtube.com', shortcut: 'yt', isApp: true, vendor: 'google' },
+            { title: 'Outlook', url: 'https://outlook.live.com', shortcut: 'out', isApp: true, vendor: 'microsoft' },
+            { title: 'Google Drive', url: 'https://drive.google.com', shortcut: 'gd', isApp: true, vendor: 'google' },
+            { title: 'Google Docs', url: 'https://docs.google.com', shortcut: 'doc', isApp: true, vendor: 'google' },
+            { title: 'Google Sheets', url: 'https://docs.google.com/spreadsheets', shortcut: 'sht', isApp: true, vendor: 'google' },
+            { title: 'Google Slides', url: 'https://docs.google.com/presentation', shortcut: 'sld', isApp: true, vendor: 'google' },
+            { title: 'Microsoft Word', url: 'https://www.office.com/launch/word', shortcut: 'mwd', isApp: true, vendor: 'microsoft' },
+            { title: 'Microsoft Excel', url: 'https://www.office.com/launch/excel', shortcut: 'mxl', isApp: true, vendor: 'microsoft' },
+            { title: 'Microsoft PowerPoint', url: 'https://www.office.com/launch/powerpoint', shortcut: 'mpt', isApp: true, vendor: 'microsoft' },
+            { title: 'Microsoft Teams', url: 'https://teams.microsoft.com', shortcut: 'tm', isApp: true, vendor: 'microsoft' }
         ];
 
         function updateView() {
@@ -304,40 +348,66 @@
             
             if (appsContainer) {
                 if (appLinks.length > 0) {
-                    appsContainer.innerHTML = appLinks.map(l => {
-                        let faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
-                        return `
-                            <a href="${l.url}" class="app-icon-card" title="${l.title}">
-                                <img src="${faviconUrl}" alt="${l.title}" onerror="this.outerHTML='🌐'">
-                                <span class="app-tooltip">${l.shortcut}</span>
-                            </a>`;
-                    }).join('');
+                    const googleApps = appLinks.filter(l => l.vendor === 'google');
+                    const msApps = appLinks.filter(l => l.vendor === 'microsoft');
+                    
+                    const renderAppGroup = (apps, title) => {
+                        if (apps.length === 0) return '';
+                        const icons = apps.map(l => {
+                            let faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
+                            let shortName = l.title.replace('Google ', '').replace('Microsoft ', '');
+                            return `<a href="${l.url}" class="app-icon-card" title="${l.title} [${l.shortcut}]">
+                                        <img src="${faviconUrl}" alt="${l.title}" onerror="this.outerHTML='🌐'">
+                                        <span class="app-name">${shortName}</span>
+                                    </a>`;
+                        }).join('');
+                        return `<div class="app-category"><div class="app-category-title">${title}</div><div class="apps-grid">${icons}</div></div>`;
+                    };
+                    
+                    appsContainer.innerHTML = renderAppGroup(googleApps, 'GOOGLE_WORKSPACE') + renderAppGroup(msApps, 'MICROSOFT_365');
                 } else {
                     appsContainer.innerHTML = '';
                 }
             }
             
-            container.innerHTML = standardLinks.map(l => {
-                let iconContent = "🌐";
-                if (l.shortcut === 'cal') {
-                    iconContent = "📅"; // Event Calendar
-                } else if (l.url !== '#') {
-                    try {
-                        const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
-                        iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.outerHTML='🌐'">`;
-                    } catch(e) {}
-                }
+            const renderCards = (linksArray) => {
+                return linksArray.map(l => {
+                    let iconContent = "🌐";
+                    if (l.shortcut === 'cal') {
+                        iconContent = "📅";
+                    } else if (l.url !== '#') {
+                        try {
+                            const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
+                            iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.outerHTML='🌐'">`;
+                        } catch(e) {}
+                    }
 
-                return `
-                    <a href="${l.url}" class="link-card">
-                        <span class="icon">${iconContent}</span>
-                        <div class="link-info">
-                            <span class="link-title">${l.title}</span>
-                            <span class="link-url">${l.url}</span>
-                        </div>
-                        <span class="shortcut-tag">${l.shortcut}</span>
-                    </a>`;
-            }).join('');
+                    return `
+                        <a href="${l.url}" class="link-card">
+                            <span class="icon">${iconContent}</span>
+                            <div class="link-info">
+                                <span class="link-title">${l.title}</span>
+                                <span class="link-url">${l.url}</span>
+                            </div>
+                            <span class="shortcut-tag">${l.shortcut}</span>
+                        </a>`;
+                }).join('');
+            };
+
+            const topLinks = standardLinks.filter(l => l.isTop);
+            const otherLinks = standardLinks.filter(l => !l.isTop);
+            
+            let htmlOut = '';
+            if (topLinks.length > 0) {
+                htmlOut += `<div class="category-header">FREQUENT_ACCESS</div>`;
+                htmlOut += `<div class="link-grid">${renderCards(topLinks)}</div>`;
+            }
+            if (otherLinks.length > 0) {
+                if (topLinks.length > 0) htmlOut += `<div class="category-header" style="margin-top: 15px;">STANDARD_MODULES</div>`;
+                else htmlOut += `<div class="category-header">STANDARD_MODULES</div>`;
+                htmlOut += `<div class="link-grid">${renderCards(otherLinks)}</div>`;
+            }
+            container.innerHTML = htmlOut;
         }
 
         // Real-time Search Processing
@@ -358,6 +428,17 @@
             const match = allLinks.find(l => l.shortcut === directParam.toLowerCase());
             if (match) window.location.replace(match.url);
         }
+
+        // Fetch latest commit hash for versioning dynamically
+        fetch('https://api.github.com/repos/ivanchenkoplaton/ivanchenkoplaton.github.io/commits?per_page=1', { cache: 'no-store' })
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.length > 0 && data[0].sha) {
+                    const hash = data[0].sha.substring(0, 7);
+                    document.getElementById('sys-version').innerText = `SYS_VER: Alpha_1.2 | build-${hash}`;
+                }
+            })
+            .catch(err => console.log('Version fetch failed:', err));
 
         updateView();
     </script>
