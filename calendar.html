@@ -7,9 +7,10 @@
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --text-color: #00ff41;
-            --border-color: #333;
-            --hover-shadow: rgba(0, 255, 65, 0.2);
+            --panel-bg: #1a1a1a;
+            --text-color: #aaaaaa;
+            --text-light: #ffffff;
+            --border-color: #333333;
             --font-main: 'Courier New', Courier, monospace;
         }
 
@@ -40,10 +41,10 @@
 
         .calendar-container {
             border: 1px solid var(--text-color);
-            box-shadow: 0 0 20px var(--hover-shadow);
-            border-radius: 8px;
+            box-shadow: 4px 4px 0 var(--text-color);
+            border-radius: 0;
             overflow: hidden;
-            background: #000;
+            background: var(--panel-bg);
             width: 100%;
             max-width: 800px;
         }
@@ -57,19 +58,18 @@
 
         .back-link {
             margin-top: 25px;
-            color: var(--text-color);
+            color: var(--text-light);
             text-decoration: none;
             border: 1px solid var(--text-color);
             padding: 10px 20px;
             transition: all 0.3s;
-            border-radius: 4px;
+            border-radius: 0;
         }
 
         .back-link:hover {
             background: var(--text-color);
-            color: #000;
-            box-shadow: 0 0 15px var(--text-color);
-            transform: translateY(-2px);
+            color: var(--bg-color);
+            transform: translate(-2px, -2px);
         }
     </style>
 </head>

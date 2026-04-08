@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Platon Ivanchenko | Terminal</title>
+    <title>Platon Ivanchenko</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --text-color: #00ff41;
-            --border-color: #333;
-            --hover-shadow: rgba(0, 255, 65, 0.3);
+            --panel-bg: #1a1a1a;
+            --text-color: #aaaaaa;
+            --text-light: #ffffff;
+            --border-color: #333333;
             --font-main: 'Courier New', Courier, monospace;
         }
         body { 
@@ -20,30 +21,27 @@
             min-height: 100vh; margin: 0; padding: 20px; 
             position: relative;
         }
-        .container { width: 100%; max-width: 800px; text-align: center; } /* Widened for Grid */
-        .header { margin-bottom: 30px; margin-top: 40px; }
+    .container { width: 100%; max-width: 800px; text-align: center; padding-right: 220px; box-sizing: border-box; } /* Yield space for the right panel */
+    .header { 
+        display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px;
+        border-bottom: 1px solid var(--text-color); padding-bottom: 10px; margin-bottom: 10px; width: 100%;
+    }
         .profile-img { 
-            width: 110px; height: 110px; border-radius: 50%; 
-            border: 2px solid var(--text-color); box-shadow: 0 0 15px var(--hover-shadow);
-            object-fit: cover; background-color: #000;
+        width: 40px; height: 40px; border-radius: 0; 
+            border: 1px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
+            object-fit: cover; background-color: var(--panel-bg);
         }
-        h2 { text-transform: uppercase; letter-spacing: 2px; }
-        .controls { margin-bottom: 30px; }
+    h2 { text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin: 0; text-align: left; word-break: break-word; }
+    .controls { margin-bottom: 30px; margin-top: 20px; }
         #search-input {
-            width: 100%; padding: 12px; background: #000; border: 1px solid var(--text-color); 
-            color: var(--text-color); border-radius: 4px; font-family: var(--font-main);
+            width: 100%; padding: 12px; background: var(--panel-bg); border: 1px solid var(--text-color); 
+            color: var(--text-light); border-radius: 0; font-family: var(--font-main);
             font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; outline: none;
-            transition: box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
         #search-input:focus {
-            box-shadow: 0 0 10px var(--hover-shadow);
+            transform: translate(-2px, -2px);
         }
-        .filter-btn {
-            background: #000; border: 1px solid var(--text-color); padding: 6px 15px; 
-            color: var(--text-color); border-radius: 0; cursor: pointer; font-size: 0.8rem; 
-            margin: 2px; transition: 0.3s; font-family: var(--font-main);
-        }
-        .filter-btn:hover, .filter-btn.active { background: var(--text-color); color: #000; box-shadow: 0 0 10px var(--text-color); }
         #link-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -52,99 +50,120 @@
         }
         .version-tag {
             position: fixed; bottom: 15px; right: 15px; font-size: 0.7rem;
-            color: rgba(0, 255, 65, 0.5); background: rgba(0, 0, 0, 0.8);
+            color: rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.8);
             padding: 5px 10px; border: 1px solid var(--border-color); pointer-events: none;
             z-index: 1000;
         }
         .link-card { 
-            background: rgba(0, 0, 0, 0.6); color: var(--text-color); text-decoration: none; 
+            background: var(--panel-bg); color: var(--text-light); text-decoration: none; 
             padding: 15px 20px; border: 1px solid var(--border-color); 
             display: flex; align-items: center; text-align: left;
             transition: all 0.3s ease; border-left: 4px solid var(--text-color);
-            border-radius: 4px;
+            border-radius: 0;
         }
-        .link-card:hover { transform: translateY(-3px); border-color: var(--text-color); box-shadow: 0 5px 15px var(--hover-shadow); }
+        .link-card:hover { transform: translate(-2px, -2px); border-color: var(--text-color); }
+        .shortcut-tag {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 2px 6px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            margin-left: auto;
+            text-transform: uppercase;
+        }
         .icon { 
             font-size: 1.5rem; margin-right: 15px; width: 30px; 
             height: 30px; display: flex; align-items: center; justify-content: center;
         }
-        .favicon-img { width: 24px; height: 24px; border-radius: 4px; }
+        .favicon-img { width: 24px; height: 24px; border-radius: 0; }
         .link-info { display: flex; flex-direction: column; overflow: hidden; }
         .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: #008f11; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
+        .link-url { font-size: 0.75rem; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
         /* Right Side Personal Accounts Bar */
         .social-sidebar {
             position: fixed;
             right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px;
+            gap: 8px;
+            background: var(--panel-bg);
+        padding: 15px;
             border: 1px solid var(--text-color);
-            border-radius: 8px;
-            box-shadow: 0 0 15px var(--hover-shadow);
+            border-radius: 0;
+        box-shadow: 4px 4px 0 var(--text-color);
             z-index: 1000;
-            align-items: center;
-            backdrop-filter: blur(5px);
+        align-items: flex-start;
+        min-width: 180px;
         }
         
         /* New Label Style */
         .sidebar-label {
-            font-size: 0.65rem;
+            font-size: 0.55rem;
             text-transform: uppercase;
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            margin-bottom: 10px;
-            color: rgba(0, 255, 65, 0.7);
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.7);
             letter-spacing: 2px;
             border-bottom: 1px solid var(--text-color);
-            padding-bottom: 5px;
+            padding-bottom: 3px;
             white-space: nowrap;
         }
 
+    .social-icons-list {
+            display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-top: 5px;
+        }
+
         .social-sidebar a {
-            display: flex; align-items: center; justify-content: center;
-            width: 30px; height: 30px; transition: 0.3s; opacity: 0.7;
+        display: flex; align-items: center; justify-content: flex-start;
+        gap: 12px; transition: 0.3s; opacity: 0.7;
+        text-decoration: none; color: var(--text-light);
+        font-size: 0.85rem; font-weight: bold;
         }
         .social-sidebar a:hover {
-            transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px var(--text-color));
+        transform: translate(-3px, -3px); opacity: 1;
         }
         .social-sidebar img {
-            width: 24px; height: 24px; border-radius: 4px;
+        width: 28px; height: 28px; border-radius: 0;
+    }
+    .social-sidebar img.rounded-icon {
+        border-radius: 8px;
         }
 
         /* Adjust social sidebar for mobile devices */
         @media (max-width: 800px) {
+        .container { padding-right: 0; }
             #link-container { grid-template-columns: 1fr; }
             .social-sidebar {
                 position: static;
-                flex-direction: row;
-                flex-wrap: wrap;
-                transform: none;
+                flex-direction: column;
                 justify-content: center;
-                margin-top: -10px;
+                align-items: center;
+                margin-top: 0;
                 margin-bottom: 20px;
                 width: 100%;
+                max-width: 100%;
                 background: none;
                 border: none;
                 box-shadow: none;
-                backdrop-filter: none;
+            }
+            .social-icons-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header {
+                border-bottom: none;
+                padding-bottom: 5px;
+                margin-bottom: 5px;
+                justify-content: center;
             }
             .sidebar-label {
-                writing-mode: horizontal-tb;
-                transform: none;
-                margin-bottom: 0;
-                margin-right: 15px;
-                border-bottom: none;
-                border-right: 1px solid var(--text-color);
-                padding-bottom: 0;
-                padding-right: 10px;
-                display: flex;
-                align-items: center;
+            margin: 10px 0;
             }
         }
     </style>
@@ -152,81 +171,71 @@
 <body>
 
     <div class="social-sidebar">
-        <div class="sidebar-label">PERSONAL_LOGS</div>
-        <a href="https://instagram.com/ivanchenkoplaton" title="Instagram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta">
-        </a>
-        <a href="https://www.snapchat.com/add/ivanchenkoplat?share_id=I7eU0PXFrIY&locale=de-DE" title="Snapchat" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=snapchat.com" alt="Snap">
-        </a>
-        <a href="https://t.me/ivanchenkoplaton" title="Telegram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG">
-        </a>
-        <a href="https://github.com/ivanchenkoplaton" title="GitHub" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH">
-        </a>
-        <a href="https://discord.gg/Y3y85FMq" title="Discord" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=discord.com" alt="DC">
-        </a>
-        <a href="mailto:pton882288@gmail.com" title="Email">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail">
-        </a>
-        <a href="https://steamcommunity.com/id/platononsteam/" title="Steam" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com" alt="Steam">
-        </a>
-    </div>
-
-    <div class="container">
         <div class="header">
             <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="profile-img">
             <h2>> Platon Ivanchenko</h2>
         </div>
+        <div class="sidebar-label">PERSONAL_LOGS</div>
+        <div class="social-icons-list">
+        <a href="https://instagram.com/ivanchenkoplaton" title="Instagram" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta">
+            <span>INSTAGRAM</span>
+        </a>
+        <a href="https://www.snapchat.com/add/ivanchenkoplat?share_id=I7eU0PXFrIY&locale=de-DE" title="Snapchat" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=snapchat.com" alt="Snap">
+            <span>SNAPCHAT</span>
+        </a>
+        <a href="https://t.me/ivanchenkoplaton" title="Telegram" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG" class="rounded-icon">
+            <span>TELEGRAM</span>
+        </a>
+        <a href="https://github.com/ivanchenkoplaton" title="GitHub" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH" class="rounded-icon">
+            <span>GITHUB</span>
+        </a>
+        <a href="https://discord.gg/Y3y85FMq" title="Discord" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=discord.com" alt="DC">
+            <span>DISCORD</span>
+        </a>
+        <a href="mailto:pton882288@gmail.com" title="Email">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail">
+            <span>EMAIL</span>
+        </a>
+        <a href="https://steamcommunity.com/id/platononsteam/" title="Steam" target="_blank">
+            <img src="https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com" alt="Steam">
+            <span>STEAM</span>
+        </a>
+        </div>
+    </div>
+
+    <div class="container">
         <div class="controls">
-            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Search links...">
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px;">
-                <button class="filter-btn active" onclick="filterLinks('all', this)">ALL_LOGS</button>
-                <button class="filter-btn" onclick="filterLinks('dev', this)">DEV</button>
-                <button class="filter-btn" onclick="filterLinks('ai', this)">AI</button>
-                <button class="filter-btn" onclick="filterLinks('storage', this)">STORAGE</button>
-                <button class="filter-btn" onclick="filterLinks('media', this)">MEDIA</button>
-                <button class="filter-btn" onclick="filterLinks('shop', this)">SHOP</button>
-                <button class="filter-btn" onclick="filterLinks('edu', this)">EDU</button>
-                <button class="filter-btn" onclick="filterLinks('util', this)">UTIL</button>
-            </div>
+            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Type shortcut & press Enter...">
         </div>
         <div id="link-container">Initializing system...</div>
     </div>
-    <div class="version-tag">SYS_VER: 1.1.2</div>
+    <div class="version-tag">SYS_VER: Alpha_1.2</div>
 
     <script>
-        let allLinks = [];
-        let currentFilter = 'all';
-
-        async function fetchLinks() {
-            try {
-                const res = await fetch('./links.csv?t=' + Date.now());
-                const csv = await res.text();
-                const rows = csv.trim().split('\n');
-                allLinks = rows.slice(1).map(r => {
-                    const c = r.split(',');
-                    return { 
-                        title: c[0]?.trim() || 'Unknown', 
-                        url: c[1]?.trim() || '#', 
-                        type: c[2]?.trim().toLowerCase() || "web" 
-                    };
-                });
-                updateView();
-            } catch (error) {
-                document.getElementById("link-container").innerHTML = "<p style='color:red;'>[ERROR] Failed to load system logs.</p>";
-            }
-        }
+        let allLinks = [
+            { title: 'Gemini', url: 'https://gemini.google.com', shortcut: 'gem' },
+            { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp' },
+            { title: 'GitHub', url: 'https://github.com', shortcut: 'gh' },
+            { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs' },
+            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od' },
+            { title: 'GoFile', url: 'https://gofile.io', shortcut: 'gf' },
+            { title: 'YouTube Music', url: 'https://music.youtube.com', shortcut: 'ym' },
+            { title: 'Steam', url: 'https://store.steampowered.com', shortcut: 'st' },
+            { title: 'Event Calendar', url: 'calendar.html', shortcut: 'cal' },
+            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm' }
+        ];
 
         function updateView() {
-            const query = document.getElementById('search-input').value.toLowerCase();
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
             const filtered = allLinks.filter(l => {
-                const matchesSearch = l.title.toLowerCase().includes(query) || l.url.toLowerCase().includes(query);
-                const matchesType = currentFilter === 'all' || l.type === currentFilter;
-                return matchesSearch && matchesType;
+                return l.title.toLowerCase().includes(query) || 
+                       l.url.toLowerCase().includes(query) ||
+                       l.shortcut.includes(query);
             });
             renderLinks(filtered);
         }
@@ -240,9 +249,7 @@
             
             container.innerHTML = links.map(l => {
                 let iconContent = "🌐";
-                if (l.type === 'storage') {
-                    iconContent = "☁️";
-                } else if (l.type === 'util') {
+                if (l.shortcut === 'cal') {
                     iconContent = "📅"; // Event Calendar
                 } else if (l.url !== '#') {
                     try {
@@ -258,21 +265,31 @@
                             <span class="link-title">${l.title}</span>
                             <span class="link-url">${l.url}</span>
                         </div>
+                        <span class="shortcut-tag">${l.shortcut}</span>
                     </a>`;
             }).join('');
-        }
-
-        function filterLinks(t, b) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            b.classList.add('active');
-            currentFilter = t;
-            updateView();
         }
 
         // Real-time Search Processing
         document.getElementById('search-input').addEventListener('input', updateView);
         
-        fetchLinks();
+        // Enter key shortcut execution
+        document.getElementById('search-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.toLowerCase().trim();
+                const match = allLinks.find(l => l.shortcut === query);
+                if (match) window.location.href = match.url;
+            }
+        });
+
+        // Handle direct ?shortcut or #shortcut routing from the URL
+        const directParam = window.location.search.substring(1) || window.location.hash.substring(1);
+        if (directParam) {
+            const match = allLinks.find(l => l.shortcut === directParam.toLowerCase());
+            if (match) window.location.replace(match.url);
+        }
+
+        updateView();
     </script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script>
+        // Isolate the path attempting to be accessed (e.g., "gh" from "/gh")
+        const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+        
+        // Define the shortcut map
+        const shortcuts = {
+            'gem': 'https://gemini.google.com',
+            'prp': 'https://www.perplexity.ai',
+            'gh': 'https://github.com',
+            'cs': 'https://cs50.harvard.edu/x/2026',
+            'od': 'https://onedrive.live.com',
+            'gf': 'https://gofile.io',
+            'ym': 'https://music.youtube.com',
+            'st': 'https://store.steampowered.com',
+            'cal': '/calendar.html',
+            'gm': 'https://mail.google.com'
+        };
+
+        // Route to the destination if known, else redirect to main page safely
+        window.location.replace(shortcuts[path] ? shortcuts[path] : '/');
+    </script>
+</head>
+<body style="background: #0a0a0a; color: #aaaaaa; font-family: monospace; padding: 20px;">
+    > SYSTEM_ROUTING: Locating destination...
+</body>
+</html>
