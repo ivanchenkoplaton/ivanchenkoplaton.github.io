@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline'; frame-src https://calendar.google.com; object-src 'none';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>System Calendar | Terminal</title>
     <style>
         :root {
@@ -83,6 +85,11 @@
         <iframe src="https://calendar.google.com/calendar/embed?src=417404f2da7f13170de53ff8798e142f8a49c68c197430fd6df1a290656a64a1%40group.calendar.google.com&ctz=Europe%2FBerlin&mode=WEEK&wkst=2" 
                 style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
+
+    <p style="max-width: 800px; text-align: center; margin-top: 18px; line-height: 1.6;">
+        Subscribe via iCal:
+        <a href="https://calendar.google.com/calendar/ical/417404f2da7f13170de53ff8798e142f8a49c68c197430fd6df1a290656a64a1%40group.calendar.google.com/public/basic.ics" style="color: #fff;">calendar.ics</a>
+    </p>
 
     <a href="index.html" class="back-link">RETURN TO TERMINAL</a>
 </body>

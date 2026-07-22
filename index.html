@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; img-src 'self' https://avatars.githubusercontent.com https://www.google.com https://www.gstatic.com data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline'; frame-src https://calendar.google.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self' mailto:; object-src 'none';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#000000">
     <title>Platon Ivanchenko</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=JetBrains+Mono:wght@400;700&display=swap');
         :root {
-            --bg-color: #0a0a0a;
-            --panel-bg: #1a1a1a;
-            --text-color: #aaaaaa;
+            --bg-color: #000000;
+            --panel-bg: #0e0e0e;
+            --text-color: #888888;
             --text-light: #ffffff;
             --border-color: #333333;
-            --font-main: 'Courier New', Courier, monospace;
+            --accent-color: #ff0000;
+            --font-main: 'JetBrains Mono', 'Courier New', monospace;
+            --font-display: 'DotGothic16', 'JetBrains Mono', monospace;
         }
         body { 
             font-family: var(--font-main); 
-            background: var(--bg-color); color: var(--text-color); 
+            background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 25%),
+                linear-gradient(180deg, #050505, #000000 55%);
+            color: var(--text-color); 
             display: flex; flex-direction: column; align-items: center; 
             min-height: 100vh; margin: 0; padding: 20px; 
             position: relative;
         }
-    .container { width: 100%; max-width: 800px; text-align: center; padding-right: 220px; box-sizing: border-box; } /* Yield space for the right panel */
+    .container { width: 100%; max-width: 860px; text-align: left; padding-right: 240px; box-sizing: border-box; } /* Yield space for the right panel */
     .header { 
         display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px;
         border-bottom: 1px solid var(--text-color); padding-bottom: 10px; margin-bottom: 10px; width: 100%;
@@ -31,13 +40,13 @@
             border: 1px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
             object-fit: cover; background-color: var(--panel-bg);
         }
-    h2 { text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; margin: 0; text-align: left; word-break: break-word; }
-    .controls { margin-bottom: 30px; margin-top: 20px; }
+    h2 { text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin: 0; text-align: left; word-break: break-word; font-family: var(--font-display); }
+    .controls { margin-bottom: 24px; margin-top: 20px; }
         #search-input {
-            width: 100%; padding: 12px; background: var(--panel-bg); border: 1px solid var(--text-color); 
-            color: var(--text-light); border-radius: 0; font-family: var(--font-main);
+            width: 100%; padding: 12px; background: var(--panel-bg); border: 1px solid var(--border-color); 
+            color: var(--text-light); border-radius: 6px; font-family: var(--font-main);
             font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s ease; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
         }
         #search-input:focus {
             transform: translate(-2px, -2px);
@@ -50,8 +59,8 @@
         }
         .link-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
             text-align: left;
         }
         .category-header {
@@ -73,12 +82,13 @@
         }
         .link-card { 
             background: var(--panel-bg); color: var(--text-light); text-decoration: none; 
-            padding: 15px 20px; border: 1px solid var(--border-color); 
+            padding: 15px 18px; border: 1px solid var(--border-color); 
             display: flex; align-items: center; text-align: left;
-            transition: all 0.3s ease; border-left: 4px solid var(--text-color);
-            border-radius: 0;
+            transition: all 0.3s ease; border-left: 3px solid var(--text-color);
+            border-radius: 6px;
+            backdrop-filter: blur(10px);
         }
-        .link-card:hover { transform: translate(-2px, -2px); border-color: var(--text-color); }
+        .link-card:hover { transform: translate(-2px, -2px); border-color: var(--text-light); border-left-color: var(--accent-color); }
         .shortcut-tag {
             background: var(--text-color);
             color: var(--bg-color);
@@ -169,14 +179,15 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            background: var(--panel-bg);
-        padding: 15px;
-            border: 1px solid var(--text-color);
-            border-radius: 0;
-        box-shadow: 4px 4px 0 var(--text-color);
+            background: rgba(14, 14, 14, 0.92);
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.02);
             z-index: 1000;
-        align-items: flex-start;
-        min-width: 180px;
+            align-items: flex-start;
+            min-width: 180px;
+            backdrop-filter: blur(10px);
         }
         
         /* New Label Style */
@@ -294,6 +305,26 @@
         <div class="controls">
             <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Type shortcut & press Enter...">
         </div>
+        <div class="contact-strip">
+            <a class="contact-chip" href="contact.vcf" download="Platon-Ivanchenko.vcf">Download vCard</a>
+            <a class="contact-chip" href="pgp.asc" download="platon-ivanchenko-pgp.asc">PGP Public Key</a>
+            <a class="contact-chip" href="mailto:pton882288@gmail.com?subject=Encrypted%20Contact">Secure Email</a>
+            <a class="contact-chip" href="calendar.html">Calendar</a>
+        </div>
+        <div class="info-grid">
+            <section class="info-panel">
+                <div class="panel-title">Contact Stack</div>
+                <p class="panel-copy">Encrypted email, PGP key, and direct calendar access for privacy-first coordination.</p>
+            </section>
+            <section class="info-panel">
+                <div class="panel-title">Systems Profile</div>
+                <p class="panel-copy">Linux automation, Docker workflows, Fedora-based environments, and self-hosted service operations.</p>
+            </section>
+            <section class="info-panel">
+                <div class="panel-title">GitHub Signal</div>
+                <p class="panel-copy">Open-source automation and scheduling scripts are available through the project repository stream.</p>
+            </section>
+        </div>
         <div id="link-container">Initializing system...</div>
         <div id="apps-container" class="apps-section"></div>
     </div>
@@ -305,6 +336,8 @@
             { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp', isTop: true },
             { title: 'GitHub', url: 'https://github.com', shortcut: 'gh', isTop: true },
             { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs', isTop: true },
+            { title: 'PGP Public Key', url: 'pgp.asc', shortcut: 'pgp' },
+            { title: 'Download vCard', url: 'contact.vcf', shortcut: 'vcf' },
             { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od', isApp: true, vendor: 'microsoft' },
             { title: 'GoFile', url: 'https://gofile.io', shortcut: 'gf' },
             { title: 'YouTube Music', url: 'https://music.youtube.com', shortcut: 'ym' },
