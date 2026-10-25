@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="theme-color" content="#0a0c10">
-    <title>Platon Ivanchenko | Hub & Dashboard</title>
+    <meta name="theme-color" content="#000000">
+    <title>Platon Ivanchenko</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0e14;
-            --surface: #11151c;
-            --surface-hover: #19202c;
-            --border: #232b38;
-            --border-highlight: #3b495e;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --accent-green: #10b981;
-            --accent-cyan: #38bdf8;
-            --accent-amber: #f59e0b;
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --surface-hover: #141414;
+            --border: #1e1e1e;
+            --border-hover: #333333;
+            --text: #e5e5e5;
+            --muted: #737373;
+            --accent: #ffffff;
+            --code-key: #a3a3a3;
             --font-mono: 'JetBrains Mono', monospace;
         }
 
@@ -29,404 +28,330 @@
 
         body {
             font-family: var(--font-mono);
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 24px 16px 50px 16px;
-            font-size: 0.9rem;
+            padding: 36px 16px 40px 16px;
+            font-size: 0.88rem;
+            line-height: 1.5;
         }
 
         .container {
             width: 100%;
-            max-width: 960px;
+            max-width: 820px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
 
-        /* Top Header */
+        /* Header */
         .header {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .identity {
+        .id-group {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }
 
         .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 6px;
-            border: 1px solid var(--border-highlight);
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
-        .identity h1 {
-            font-size: 1.05rem;
+        .id-info h1 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .id-info p {
+            font-size: 0.72rem;
+            color: var(--muted);
+        }
+
+        /* Contacts Bar */
+        .contacts {
+            display: flex;
+            gap: 14px;
+            font-size: 0.75rem;
+        }
+
+        .contacts a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .contacts a:hover {
             color: #fff;
         }
 
-        .identity p {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .badge-status {
+        /* Search input */
+        .cli-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 10px 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.75rem;
-            color: var(--accent-green);
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 6px var(--accent-green);
-        }
-
-        /* Quick Contact Bar */
-        .contact-strip {
-            display: flex;
-            flex-wrap: wrap;
             gap: 10px;
         }
 
-        .contact-chip {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .contact-chip:hover {
-            border-color: var(--accent-cyan);
-            background: var(--surface-hover);
-            transform: translateY(-2px);
-        }
-
-        .contact-chip .chip-label {
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-
-        /* Launcher Bar */
-        .launcher-bar {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
         .prompt {
-            color: var(--accent-cyan);
+            color: var(--muted);
             font-weight: 700;
         }
 
-        .launcher-input {
+        .cli-input {
             width: 100%;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--text-main);
+            color: var(--text);
             font-family: var(--font-mono);
-            font-size: 0.95rem;
+            font-size: 0.88rem;
         }
 
-        /* Category section */
-        .section-box {
+        /* Sections */
+        .section {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .section-title {
-            font-size: 0.75rem;
-            letter-spacing: 1.5px;
-            color: var(--accent-cyan);
+        .section-label {
+            font-size: 0.68rem;
             text-transform: uppercase;
-            border-bottom: 1px dashed var(--border);
-            padding-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            padding-left: 2px;
         }
 
-        .card-grid {
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
         }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 14px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            border-radius: 4px;
+            padding: 12px 14px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.15s ease;
         }
 
         .card:hover {
-            border-color: var(--accent-cyan);
+            border-color: var(--border-hover);
             background: var(--surface-hover);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        .card-top {
+        .card-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .card-name {
-            font-weight: 700;
+            font-weight: 600;
             color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.85rem;
         }
 
-        .shortcut-badge {
+        .key-tag {
             font-size: 0.65rem;
-            background: var(--border);
-            color: var(--accent-cyan);
-            padding: 2px 6px;
+            background: #141414;
+            color: var(--code-key);
+            border: 1px solid var(--border);
+            padding: 1px 5px;
             border-radius: 3px;
-            font-weight: 700;
         }
 
-        .card-url {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+        .card-desc {
+            font-size: 0.72rem;
+            color: var(--muted);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
-        .card-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .protocol-chip {
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            text-decoration: none;
-            border: 1px solid var(--border);
-        }
-
-        .protocol-chip:hover {
-            color: #fff;
-            border-color: var(--accent-cyan);
-        }
-
+        /* Footer */
         .footer {
-            font-size: 0.72rem;
-            color: var(--text-muted);
+            margin-top: 10px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            font-size: 0.7rem;
+            color: var(--muted);
             display: flex;
             justify-content: space-between;
-            padding-top: 14px;
-            border-top: 1px solid var(--border);
+            align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .footer a {
-            color: var(--text-muted);
+            color: var(--muted);
             text-decoration: none;
         }
 
         .footer a:hover {
-            color: var(--accent-cyan);
+            color: #fff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Profile Banner -->
+        <!-- Header -->
         <header class="header">
-            <div class="identity">
-                <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="avatar">
-                <div>
+            <div class="id-group">
+                <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon" class="avatar">
+                <div class="id-info">
                     <h1>Platon Ivanchenko</h1>
-                    <p>Systems Integration & Homelab Infrastructure</p>
+                    <p>Homelab & Infrastructure</p>
                 </div>
             </div>
-            <div class="badge-status">
-                <span class="dot"></span>
-                <span>SYSTEM_ONLINE</span>
-            </div>
+            <nav class="contacts" aria-label="Contacts">
+                <a href="mailto:me@ivanchenko.org">me@ivanchenko.org</a>
+                <span>&bull;</span>
+                <a href="https://t.me/ivanchenkoplaton" target="_blank" rel="noopener">@ivanchenkoplaton</a>
+                <span>&bull;</span>
+                <a href="https://github.com/ivanchenkoplaton" target="_blank" rel="noopener">GitHub</a>
+            </nav>
         </header>
 
-        <!-- Direct Verified Contacts Strip -->
-        <nav class="contact-strip" aria-label="Direct Contacts">
-            <a href="mailto:me@ivanchenko.org" class="contact-chip">
-                <span class="chip-label">Email</span>
-                <span>me@ivanchenko.org</span>
-            </a>
-            <a href="https://t.me/ivanchenkoplaton" target="_blank" rel="noopener" class="contact-chip">
-                <span class="chip-label">Telegram</span>
-                <span>@ivanchenkoplaton</span>
-            </a>
-            <a href="https://github.com/ivanchenkoplaton" target="_blank" rel="noopener" class="contact-chip">
-                <span class="chip-label">GitHub</span>
-                <span>ivanchenkoplaton</span>
-            </a>
-        </nav>
-
-        <!-- Launcher Bar -->
-        <div class="launcher-bar">
-            <span class="prompt">platon@lab:~$</span>
-            <input type="text" id="launcher-input" class="launcher-input" placeholder="Search or shortcut (e.g. 'um', 'tg', 'mail', 'gh') and press Enter..." autofocus>
+        <!-- Minimal Search / CLI -->
+        <div class="cli-box">
+            <span class="prompt">&gt;</span>
+            <input type="text" id="cli" class="cli-input" placeholder="Type shortcut or search (e.g. 'im', 'nc', 'um', 'gw') and hit Enter..." autofocus>
         </div>
 
-        <!-- Local Homelab & Node Services -->
-        <section class="section-box">
-            <div class="section-title">
-                <span>Homelab & Local Nodes</span>
-                <span>LAN / WIREGUARD</span>
-            </div>
-            <div class="card-grid">
-                <!-- Umbrel Server -->
-                <div class="card">
-                    <div class="card-top">
-                        <span class="card-name">⚡ Umbrel Server</span>
-                        <span class="shortcut-badge">UM</span>
+        <!-- Homelab & Local Nodes -->
+        <section class="section">
+            <span class="section-label">Local Infrastructure</span>
+            <div class="grid">
+                <!-- Umbrel Main -->
+                <a href="https://umbrel.local" class="card" target="_blank" rel="noopener">
+                    <div class="card-head">
+                        <span class="card-name">Umbrel OS</span>
+                        <span class="key-tag">um</span>
                     </div>
-                    <span class="card-url">umbrel.local (Node OS)</span>
-                    <div class="card-actions">
-                        <a href="https://umbrel.local" class="protocol-chip" target="_blank" rel="noopener">HTTPS</a>
-                        <a href="http://umbrel.local" class="protocol-chip" target="_blank" rel="noopener">HTTP</a>
-                    </div>
-                </div>
+                    <span class="card-desc">umbrel.local (Dashboard)</span>
+                </a>
 
-                <!-- Local Gateway -->
-                <div class="card">
-                    <div class="card-top">
-                        <span class="card-name">🌐 Gateway & Router</span>
-                        <span class="shortcut-badge">GW</span>
+                <!-- Immich -->
+                <a href="https://umbrel.local:2283/auth/login" class="card" target="_blank" rel="noopener">
+                    <div class="card-head">
+                        <span class="card-name">Immich</span>
+                        <span class="key-tag">im</span>
                     </div>
-                    <span class="card-url">192.168.178.1 / fritz.box</span>
-                    <div class="card-actions">
-                        <a href="http://192.168.178.1" class="protocol-chip" target="_blank" rel="noopener">192.168.178.1</a>
-                        <a href="http://fritz.box" class="protocol-chip" target="_blank" rel="noopener">fritz.box</a>
-                    </div>
-                </div>
+                    <span class="card-desc">umbrel.local:2283 (Photos & Backup)</span>
+                </a>
 
-                <!-- DNS Sinkhole -->
-                <div class="card">
-                    <div class="card-top">
-                        <span class="card-name">🛡️ DNS / Pi-hole</span>
-                        <span class="shortcut-badge">DNS</span>
+                <!-- Nextcloud -->
+                <a href="http://umbrel.local:8081/login" class="card" target="_blank" rel="noopener">
+                    <div class="card-head">
+                        <span class="card-name">Nextcloud</span>
+                        <span class="key-tag">nc</span>
                     </div>
-                    <span class="card-url">pi.hole / AdGuard Home</span>
-                    <div class="card-actions">
-                        <a href="http://pi.hole/admin" class="protocol-chip" target="_blank" rel="noopener">Admin Web</a>
+                    <span class="card-desc">umbrel.local:8081 (Cloud Storage)</span>
+                </a>
+
+                <!-- Gateway -->
+                <a href="http://192.168.178.1" class="card" target="_blank" rel="noopener">
+                    <div class="card-head">
+                        <span class="card-name">Gateway</span>
+                        <span class="key-tag">gw</span>
                     </div>
-                </div>
+                    <span class="card-desc">192.168.178.1 / fritz.box</span>
+                </a>
             </div>
         </section>
 
-        <!-- Cloud & Engineering Services -->
-        <section class="section-box">
-            <div class="section-title">
-                <span>Engineering & Tools</span>
-                <span>SERVICES</span>
-            </div>
-            <div class="card-grid">
+        <!-- Tools & Services -->
+        <section class="section">
+            <span class="section-label">Services & Tools</span>
+            <div class="grid">
                 <a href="https://github.com/ivanchenkoplaton" class="card" target="_blank" rel="noopener">
-                    <div class="card-top">
-                        <span class="card-name">🐙 GitHub</span>
-                        <span class="shortcut-badge">GH</span>
+                    <div class="card-head">
+                        <span class="card-name">GitHub</span>
+                        <span class="key-tag">gh</span>
                     </div>
-                    <span class="card-url">github.com/ivanchenkoplaton</span>
+                    <span class="card-desc">github.com/ivanchenkoplaton</span>
                 </a>
 
                 <a href="https://www.perplexity.ai" class="card" target="_blank" rel="noopener">
-                    <div class="card-top">
-                        <span class="card-name">🔍 Perplexity AI</span>
-                        <span class="shortcut-badge">PRP</span>
+                    <div class="card-head">
+                        <span class="card-name">Perplexity</span>
+                        <span class="key-tag">prp</span>
                     </div>
-                    <span class="card-url">perplexity.ai</span>
+                    <span class="card-desc">perplexity.ai (Research)</span>
                 </a>
 
                 <a href="https://cs50.harvard.edu/x/2026" class="card" target="_blank" rel="noopener">
-                    <div class="card-top">
-                        <span class="card-name">💻 CS50x Track</span>
-                        <span class="shortcut-badge">CS</span>
+                    <div class="card-head">
+                        <span class="card-name">CS50x Track</span>
+                        <span class="key-tag">cs</span>
                     </div>
-                    <span class="card-url">cs50.harvard.edu/x/2026</span>
+                    <span class="card-desc">Harvard CS curriculum</span>
+                </a>
+
+                <a href="calendar.html" class="card">
+                    <div class="card-head">
+                        <span class="card-name">Calendar</span>
+                        <span class="key-tag">cal</span>
+                    </div>
+                    <span class="card-desc">Personal schedule</span>
                 </a>
             </div>
         </section>
 
         <!-- Footer -->
         <footer class="footer">
-            <span>Terminal Startpage &bull; Platon Ivanchenko</span>
-            <div>
-                <a href="https://t.me/ivanchenkoplaton" target="_blank" rel="noopener">Telegram</a> &bull;
-                <a href="mailto:me@ivanchenko.org">me@ivanchenko.org</a> &bull;
-                <a href="https://github.com/ivanchenkoplaton/ivanchenkoplaton.github.io" target="_blank">Repo</a>
-            </div>
+            <span>ivanchenkoplaton.github.io</span>
+            <a href="https://github.com/ivanchenkoplaton/ivanchenkoplaton.github.io" target="_blank" rel="noopener">source</a>
         </footer>
     </div>
 
     <script>
-        const quickRoutes = [
+        const routes = [
             { key: 'um', url: 'https://umbrel.local' },
-            { key: 'um-http', url: 'http://umbrel.local' },
+            { key: 'im', url: 'https://umbrel.local:2283/auth/login' },
+            { key: 'nc', url: 'http://umbrel.local:8081/login' },
             { key: 'gw', url: 'http://192.168.178.1' },
-            { key: 'dns', url: 'http://pi.hole/admin' },
-            { key: 'mail', url: 'mailto:me@ivanchenko.org' },
-            { key: 'tg', url: 'https://t.me/ivanchenkoplaton' },
             { key: 'gh', url: 'https://github.com/ivanchenkoplaton' },
             { key: 'prp', url: 'https://www.perplexity.ai' },
-            { key: 'cs', url: 'https://cs50.harvard.edu/x/2026' }
+            { key: 'cs', url: 'https://cs50.harvard.edu/x/2026' },
+            { key: 'cal', url: 'calendar.html' },
+            { key: 'mail', url: 'mailto:me@ivanchenko.org' },
+            { key: 'tg', url: 'https://t.me/ivanchenkoplaton' }
         ];
 
-        const input = document.getElementById('launcher-input');
+        const cli = document.getElementById('cli');
 
-        input.addEventListener('keydown', (e) => {
+        cli.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                const query = input.value.trim().toLowerCase();
-                const matched = quickRoutes.find(r => r.key === query);
+                const query = cli.value.trim().toLowerCase();
+                const matched = routes.find(r => r.key === query);
                 if (matched) {
                     window.location.href = matched.url;
                 } else if (query.startsWith('http://') || query.startsWith('https://')) {
@@ -435,8 +360,8 @@
             }
         });
 
-        input.addEventListener('input', () => {
-            const query = input.value.trim().toLowerCase();
+        cli.addEventListener('input', () => {
+            const query = cli.value.trim().toLowerCase();
             document.querySelectorAll('.card').forEach(card => {
                 const text = card.textContent.toLowerCase();
                 card.style.display = text.includes(query) ? 'flex' : 'none';
