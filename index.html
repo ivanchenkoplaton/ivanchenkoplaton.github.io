@@ -3,468 +3,452 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; img-src 'self' https://avatars.githubusercontent.com https://www.google.com https://www.gstatic.com data:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline'; frame-src https://calendar.google.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self' mailto:; object-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self' mailto:;">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="theme-color" content="#000000">
-    <title>Platon Ivanchenko</title>
+    <meta name="theme-color" content="#0a0c10">
+    <meta name="description" content="Platon Ivanchenko - Systems Integration, Linux Infrastructure & Networking Portfolio">
+    <title>Platon Ivanchenko | Systems & Infrastructure</title>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/153730556?v=4">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=JetBrains+Mono:wght@400;700&display=swap');
         :root {
-            --bg-color: #000000;
-            --panel-bg: #0e0e0e;
-            --text-color: #888888;
-            --text-light: #ffffff;
-            --border-color: #333333;
-            --accent-color: #ff0000;
-            --font-main: 'JetBrains Mono', 'Courier New', monospace;
-            --font-display: 'DotGothic16', 'JetBrains Mono', monospace;
+            --bg-color: #0b0e14;
+            --surface: #11151c;
+            --surface-hover: #171d26;
+            --border: #232b38;
+            --border-highlight: #364254;
+            --text-main: #e2e8f0;
+            --text-muted: #8892b0;
+            --accent-green: #2ecc71;
+            --accent-cyan: #38bdf8;
+            --accent-amber: #f59e0b;
+            --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
         }
-        body { 
-            font-family: var(--font-main); 
-            background:
-                radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 25%),
-                linear-gradient(180deg, #050505, #000000 55%);
-            color: var(--text-color); 
-            display: flex; flex-direction: column; align-items: center; 
-            min-height: 100vh; margin: 0; padding: 20px; 
-            position: relative;
-        }
-    .container { width: 100%; max-width: 860px; text-align: left; padding-right: 240px; box-sizing: border-box; } /* Yield space for the right panel */
-    .header { 
-        display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px;
-        border-bottom: 1px solid var(--text-color); padding-bottom: 10px; margin-bottom: 10px; width: 100%;
-    }
-        .profile-img { 
-        width: 40px; height: 40px; border-radius: 0; 
-            border: 1px solid var(--text-color); box-shadow: 2px 2px 0 var(--text-color);
-            object-fit: cover; background-color: var(--panel-bg);
-        }
-    h2 { text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin: 0; text-align: left; word-break: break-word; font-family: var(--font-display); }
-    .controls { margin-bottom: 24px; margin-top: 20px; }
-        #search-input {
-            width: 100%; padding: 12px; background: var(--panel-bg); border: 1px solid var(--border-color); 
-            color: var(--text-light); border-radius: 6px; font-family: var(--font-main);
-            font-size: 1rem; box-sizing: border-box; margin-bottom: 15px; outline: none;
-            transition: all 0.3s ease; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-        }
-        #search-input:focus {
-            transform: translate(-2px, -2px);
-        }
-        #link-container {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            width: 100%;
-        }
-        .link-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-            text-align: left;
-        }
-        .category-header {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 5px;
-            width: 100%;
-            text-align: left;
-            margin-bottom: -10px;
-        }
-        .version-tag {
-            position: fixed; bottom: 15px; right: 15px; font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.8);
-            padding: 5px 10px; border: 1px solid var(--border-color); pointer-events: none;
-            z-index: 1000;
-        }
-        .link-card { 
-            background: var(--panel-bg); color: var(--text-light); text-decoration: none; 
-            padding: 15px 18px; border: 1px solid var(--border-color); 
-            display: flex; align-items: center; text-align: left;
-            transition: all 0.3s ease; border-left: 3px solid var(--text-color);
-            border-radius: 6px;
-            backdrop-filter: blur(10px);
-        }
-        .link-card:hover { transform: translate(-2px, -2px); border-color: var(--text-light); border-left-color: var(--accent-color); }
-        .shortcut-tag {
-            background: var(--text-color);
-            color: var(--bg-color);
-            padding: 2px 6px;
-            font-size: 0.65rem;
-            font-weight: bold;
-            margin-left: auto;
-            text-transform: uppercase;
-        }
-        .icon { 
-            font-size: 1.5rem; margin-right: 15px; width: 30px; 
-            height: 30px; display: flex; align-items: center; justify-content: center;
-        }
-        .favicon-img { width: 24px; height: 24px; border-radius: 0; }
-        .link-info { display: flex; flex-direction: column; overflow: hidden; }
-        .link-title { font-weight: 600; font-size: 1rem; }
-        .link-url { font-size: 0.75rem; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.8; }
 
-        /* App Sections and Categories */
-        .apps-section {
-            margin-top: 40px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-        .app-category {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-        .app-category-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 15px;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 5px;
-            width: 100%;
-            text-align: center;
-        }
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 100%;
-        }
-        .app-icon-card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            width: 100%;
-            height: 50px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 15px;
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 16px 60px 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .terminal-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Top Header / Status bar */
+        .term-header {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            transition: all 0.3s ease;
-            text-decoration: none;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 12px;
         }
-        .app-icon-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--text-color);
-            box-shadow: 2px 2px 0 var(--text-color);
-        }
-        .app-icon-card img { width: 22px; height: 22px; }
-        .app-name {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.8);
-            text-transform: uppercase;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: left;
-            letter-spacing: 0.5px;
+
+        .identity {
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        /* Right Side Personal Accounts Bar */
-        .social-sidebar {
-            position: fixed;
-            right: 20px;
-            top: 20px;
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            border: 1px solid var(--border-highlight);
+            object-fit: cover;
+        }
+
+        .id-details h1 {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .id-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            background: rgba(46, 204, 113, 0.08);
+            border: 1px solid rgba(46, 204, 113, 0.25);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--accent-green);
+        }
+
+        /* CLI / Search bar */
+        .cli-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cli-prompt {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            user-select: none;
+        }
+
+        .cli-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        /* Navigation Chips */
+        .chip-strip {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .chip-btn {
+            background: var(--surface);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            font-family: var(--font-mono);
+        }
+
+        .chip-btn:hover, .chip-btn.active {
+            color: #fff;
+            border-color: var(--accent-cyan);
+            background: var(--surface-hover);
+        }
+
+        /* Card Sections */
+        .section-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .panel-heading {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 6px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .node-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .node-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+            background: var(--surface-hover);
+        }
+
+        .node-title {
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .node-tag {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: var(--border);
+            color: var(--text-muted);
+        }
+
+        .node-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Spec Table */
+        .spec-list {
             display: flex;
             flex-direction: column;
             gap: 8px;
-            background: rgba(14, 14, 14, 0.92);
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.02);
-            z-index: 1000;
-            align-items: flex-start;
-            min-width: 180px;
-            backdrop-filter: blur(10px);
-        }
-        
-        /* New Label Style */
-        .sidebar-label {
-            font-size: 0.55rem;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 2px;
-            border-bottom: 1px solid var(--text-color);
-            padding-bottom: 3px;
-            white-space: nowrap;
+            font-size: 0.82rem;
         }
 
-    .social-icons-list {
+        .spec-row {
             display: flex;
-        flex-direction: column;
-        gap: 12px;
-        width: 100%;
-        margin-top: 5px;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .social-sidebar a {
-        display: flex; align-items: center; justify-content: flex-start;
-        gap: 12px; transition: 0.3s; opacity: 0.7;
-        text-decoration: none; color: var(--text-light);
-        font-size: 0.85rem; font-weight: bold;
-        }
-        .social-sidebar a:hover {
-        transform: translate(-3px, -3px); opacity: 1;
-        }
-        .social-sidebar img {
-        width: 28px; height: 28px; border-radius: 0;
-    }
-    .social-sidebar img.rounded-icon {
-        border-radius: 8px;
+        .spec-key {
+            color: var(--text-muted);
         }
 
-        /* Adjust social sidebar for mobile devices */
-        @media (max-width: 800px) {
-        .container { padding-right: 0; }
-            .link-grid { grid-template-columns: 1fr; }
-            .apps-grid { grid-template-columns: repeat(2, 1fr); }
-            .social-sidebar {
-                position: static;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                margin-top: 0;
-                margin-bottom: 20px;
-                width: 100%;
-                max-width: 100%;
-                background: none;
-                border: none;
-                box-shadow: none;
-            }
-            .social-icons-list {
-                flex-direction: row;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .header {
-                border-bottom: none;
-                padding-bottom: 5px;
-                margin-bottom: 5px;
-                justify-content: center;
-            }
-            .sidebar-label {
-            margin: 10px 0;
-            }
+        .spec-val {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .term-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .term-footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .term-footer a:hover {
+            color: var(--accent-cyan);
+        }
+
+        @media (max-width: 600px) {
+            .term-header { flex-direction: column; align-items: flex-start; }
+            .status-badge { align-self: flex-start; }
         }
     </style>
 </head>
 <body>
 
-    <div class="social-sidebar">
-        <div class="header">
-            <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="profile-img">
-            <h2>> Platon Ivanchenko</h2>
-        </div>
-        <div class="sidebar-label">PERSONAL_LOGS</div>
-        <div class="social-icons-list">
-        <a href="https://instagram.com/ivanchenkoplaton" title="Instagram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=instagram.com" alt="Insta">
-            <span>INSTAGRAM</span>
-        </a>
-        <a href="https://www.snapchat.com/add/ivanchenkoplat?share_id=I7eU0PXFrIY&locale=de-DE" title="Snapchat" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=snapchat.com" alt="Snap">
-            <span>SNAPCHAT</span>
-        </a>
-        <a href="https://t.me/ivanchenkoplaton" title="Telegram" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=t.me" alt="TG" class="rounded-icon">
-            <span>TELEGRAM</span>
-        </a>
-        <a href="https://github.com/ivanchenkoplaton" title="GitHub" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt="GH" class="rounded-icon">
-            <span>GITHUB</span>
-        </a>
-        <a href="https://discord.gg/Y3y85FMq" title="Discord" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=discord.com" alt="DC">
-            <span>DISCORD</span>
-        </a>
-        <a href="mailto:pton882288@gmail.com" title="Email">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=mail.google.com" alt="Mail">
-            <span>EMAIL</span>
-        </a>
-        <a href="https://steamcommunity.com/id/platononsteam/" title="Steam" target="_blank">
-            <img src="https://www.google.com/s2/favicons?sz=64&domain=steamcommunity.com" alt="Steam">
-            <span>STEAM</span>
-        </a>
-        </div>
-    </div>
+    <main class="terminal-container">
+        <!-- Top Banner -->
+        <header class="term-header">
+            <div class="identity">
+                <img src="https://avatars.githubusercontent.com/u/153730556?v=4" alt="Platon Ivanchenko" class="avatar">
+                <div class="id-details">
+                    <h1>Platon Ivanchenko</h1>
+                    <p>Fachinformatiker Systemintegration | Home-Lab & Linux Enthusiast</p>
+                </div>
+            </div>
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>SYSTEM_ONLINE</span>
+            </div>
+        </header>
 
-    <div class="container">
-        <div class="controls">
-            <input type="text" id="search-input" placeholder="[QUERY_SYSTEM]: Type shortcut & press Enter...">
+        <!-- Search / Command launcher -->
+        <div class="cli-bar">
+            <span class="cli-prompt">platon@lab:~$</span>
+            <input type="text" id="cli-input" class="cli-input" placeholder="Type module name or jump shortcut (e.g. 'gh', 'vcf', 'pgp', 'cal') and press Enter..." autofocus>
         </div>
-        <div class="contact-strip">
-            <a class="contact-chip" href="contact.vcf" download="Platon-Ivanchenko.vcf">Download vCard</a>
-            <a class="contact-chip" href="pgp.asc" download="platon-ivanchenko-pgp.asc">PGP Public Key</a>
-            <a class="contact-chip" href="mailto:pton882288@gmail.com?subject=Encrypted%20Contact">Secure Email</a>
-            <a class="contact-chip" href="calendar.html">Calendar</a>
-        </div>
-        <div class="info-grid">
-            <section class="info-panel">
-                <div class="panel-title">Contact Stack</div>
-                <p class="panel-copy">Encrypted email, PGP key, and direct calendar access for privacy-first coordination.</p>
-            </section>
-            <section class="info-panel">
-                <div class="panel-title">Systems Profile</div>
-                <p class="panel-copy">Linux automation, Docker workflows, Fedora-based environments, and self-hosted service operations.</p>
-            </section>
-            <section class="info-panel">
-                <div class="panel-title">GitHub Signal</div>
-                <p class="panel-copy">Open-source automation and scheduling scripts are available through the project repository stream.</p>
-            </section>
-        </div>
-        <div id="link-container">Initializing system...</div>
-        <div id="apps-container" class="apps-section"></div>
-    </div>
-    <div class="version-tag" id="sys-version">SYS_VER: Alpha_1.2</div>
+
+        <!-- Quick Filter Chips -->
+        <nav class="chip-strip" aria-label="Sections">
+            <button class="chip-btn active" onclick="filterCategory('all')">[ All Nodes ]</button>
+            <button class="chip-btn" onclick="filterCategory('infra')">[ Infrastructure ]</button>
+            <button class="chip-btn" onclick="filterCategory('tools')">[ Quick Access ]</button>
+            <button class="chip-btn" onclick="filterCategory('keys')">[ Security & PGP ]</button>
+        </nav>
+
+        <!-- Homelab & Technical Focus -->
+        <section class="section-panel" data-cat="infra">
+            <div class="panel-heading">
+                <span>Infrastructure & Lab Architecture</span>
+                <span>SYSTEMS</span>
+            </div>
+            <div class="spec-list">
+                <div class="spec-row">
+                    <span class="spec-key">Core Operating Systems</span>
+                    <span class="spec-val">Linux (Debian / Fedora / Proxmox VE)</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Network & Storage Stack</span>
+                    <span class="spec-val">VLANs, ZFS RAID arrays, WireGuard VPN, WoL</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Containerization & Services</span>
+                    <span class="spec-val">Docker Compose, reverse proxies, automated backup routines</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-key">Current Focus</span>
+                    <span class="spec-val">Computer Science coursework, systems automation, Bash/Python tooling</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Module & Shortcut Cards -->
+        <section class="section-panel">
+            <div class="panel-heading">
+                <span>Target Endpoints & Modules</span>
+                <span id="match-count">AVAILABLE</span>
+            </div>
+            <div class="grid-2" id="modules-grid">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="term-footer">
+            <span id="git-sha">SYS_BUILD: loading...</span>
+            <div>
+                <a href="contact.vcf" download>vCard</a> &bull;
+                <a href="calendar.html">Schedule</a> &bull;
+                <a href="https://github.com/ivanchenkoplaton" target="_blank" rel="noopener">GitHub Profile</a>
+            </div>
+        </footer>
+    </main>
 
     <script>
-        let allLinks = [
-            { title: 'Gemini', url: 'https://gemini.google.com', shortcut: 'gem', isTop: true },
-            { title: 'Perplexity', url: 'https://www.perplexity.ai', shortcut: 'prp', isTop: true },
-            { title: 'GitHub', url: 'https://github.com', shortcut: 'gh', isTop: true },
-            { title: 'CS50x 2026', url: 'https://cs50.harvard.edu/x/2026', shortcut: 'cs', isTop: true },
-            { title: 'PGP Public Key', url: 'pgp.asc', shortcut: 'pgp' },
-            { title: 'Download vCard', url: 'contact.vcf', shortcut: 'vcf' },
-            { title: 'OneDrive', url: 'https://onedrive.live.com', shortcut: 'od', isApp: true, vendor: 'microsoft' },
-            { title: 'GoFile', url: 'https://gofile.io', shortcut: 'gf' },
-            { title: 'YouTube Music', url: 'https://music.youtube.com', shortcut: 'ym' },
-            { title: 'Steam', url: 'https://store.steampowered.com', shortcut: 'st', isTop: true },
-            { title: 'Event Calendar', url: 'calendar.html', shortcut: 'cal' },
-            { title: 'Gmail', url: 'https://mail.google.com', shortcut: 'gm', isApp: true, vendor: 'google' },
-            { title: 'YouTube', url: 'https://www.youtube.com', shortcut: 'yt', isApp: true, vendor: 'google' }
+        const nodes = [
+            { title: "GitHub Repositories", desc: "Open-source scripts, dotfiles, and system automation tools.", url: "https://github.com/ivanchenkoplaton", cat: "infra", shortcut: "gh" },
+            { title: "CS50x Learning Track", desc: "Harvard's Computer Science curriculum coursework & projects.", url: "https://cs50.harvard.edu/x/2026", cat: "infra", shortcut: "cs" },
+            { title: "Interactive Calendar", desc: "Direct coordination and booking portal.", url: "calendar.html", cat: "tools", shortcut: "cal" },
+            { title: "PGP Public Key", desc: "Download public key for encrypted communications.", url: "pgp.asc", cat: "keys", shortcut: "pgp" },
+            { title: "vCard Digital Contact", desc: "Direct address book import card (VCF standard format).", url: "contact.vcf", cat: "tools", shortcut: "vcf" },
+            { title: "Encrypted Mail", desc: "Reach out via security-first email channel.", url: "mailto:pton882288@gmail.com?subject=Contact", cat: "keys", shortcut: "mail" },
+            { title: "Perplexity AI", desc: "Academic research and technical problem verification engine.", url: "https://www.perplexity.ai", cat: "tools", shortcut: "prp" },
+            { title: "Steam Profile", desc: "Gaming hardware verification and CS2 testing profile.", url: "https://steamcommunity.com/id/platononsteam/", cat: "tools", shortcut: "st" }
         ];
 
-        function updateView() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            const filtered = allLinks.filter(l => {
-                return l.title.toLowerCase().includes(query) || 
-                       l.url.toLowerCase().includes(query) ||
-                       l.shortcut.includes(query);
-            });
-            renderLinks(filtered);
-        }
+        let activeCategory = 'all';
 
-        function renderLinks(links) {
-            const container = document.getElementById("link-container");
-            const appsContainer = document.getElementById("apps-container");
-            
-            if (links.length === 0) {
-                container.innerHTML = "<p>[SYSTEM]: No records match current parameters.</p>";
-                if (appsContainer) appsContainer.innerHTML = "";
+        function renderNodes() {
+            const query = document.getElementById('cli-input').value.toLowerCase().trim();
+            const grid = document.getElementById('modules-grid');
+
+            const filtered = nodes.filter(n => {
+                const matchesCat = (activeCategory === 'all' || n.cat === activeCategory);
+                const matchesQuery = n.title.toLowerCase().includes(query) ||
+                                     n.desc.toLowerCase().includes(query) ||
+                                     n.shortcut.includes(query);
+                return matchesCat && matchesQuery;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; padding: 20px; color: var(--text-muted); text-align: center;">[!] No registered module matches filter query.</div>`;
                 return;
             }
-            
-            const standardLinks = links.filter(l => !l.isApp);
-            const appLinks = links.filter(l => l.isApp);
-            
-            if (appsContainer) {
-                if (appLinks.length > 0) {
-                    const googleApps = appLinks.filter(l => l.vendor === 'google');
-                    const msApps = appLinks.filter(l => l.vendor === 'microsoft');
-                    
-                    const renderAppGroup = (apps, title) => {
-                        if (apps.length === 0) return '';
-                        const icons = apps.map(l => {
-                            let faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
-                            let shortName = l.title.replace('Google ', '').replace('Microsoft ', '');
-                            return `<a href="${l.url}" class="app-icon-card" title="${l.title} [${l.shortcut}]">
-                                        <img src="${faviconUrl}" alt="${l.title}" onerror="this.outerHTML='🌐'">
-                                        <span class="app-name">${shortName}</span>
-                                    </a>`;
-                        }).join('');
-                        return `<div class="app-category"><div class="app-category-title">${title}</div><div class="apps-grid">${icons}</div></div>`;
-                    };
-                    
-                    appsContainer.innerHTML = renderAppGroup(googleApps, 'GOOGLE_WORKSPACE') + renderAppGroup(msApps, 'MICROSOFT_365');
-                } else {
-                    appsContainer.innerHTML = '';
-                }
-            }
-            
-            const renderCards = (linksArray) => {
-                return linksArray.map(l => {
-                    let iconContent = "🌐";
-                    if (l.shortcut === 'cal') {
-                        iconContent = "📅";
-                    } else if (l.url !== '#') {
-                        try {
-                            const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain=${new URL(l.url, window.location.href).hostname}`;
-                            iconContent = `<img src="${faviconUrl}" class="favicon-img" onerror="this.outerHTML='🌐'">`;
-                        } catch(e) {}
-                    }
 
-                    return `
-                        <a href="${l.url}" class="link-card">
-                            <span class="icon">${iconContent}</span>
-                            <div class="link-info">
-                                <span class="link-title">${l.title}</span>
-                                <span class="link-url">${l.url}</span>
-                            </div>
-                            <span class="shortcut-tag">${l.shortcut}</span>
-                        </a>`;
-                }).join('');
-            };
+            grid.innerHTML = filtered.map(n => `
+                <a href="${n.url}" class="node-card" ${n.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>
+                    <div class="node-title">
+                        <span>${n.title}</span>
+                        <span class="node-tag">${n.shortcut.toUpperCase()}</span>
+                    </div>
+                    <div class="node-desc">${n.desc}</div>
+                </a>
+            `).join('');
 
-            const topLinks = standardLinks.filter(l => l.isTop);
-            const otherLinks = standardLinks.filter(l => !l.isTop);
-            
-            let htmlOut = '';
-            if (topLinks.length > 0) {
-                htmlOut += `<div class="category-header">FREQUENT_ACCESS</div>`;
-                htmlOut += `<div class="link-grid">${renderCards(topLinks)}</div>`;
-            }
-            if (otherLinks.length > 0) {
-                if (topLinks.length > 0) htmlOut += `<div class="category-header" style="margin-top: 15px;">STANDARD_MODULES</div>`;
-                else htmlOut += `<div class="category-header">STANDARD_MODULES</div>`;
-                htmlOut += `<div class="link-grid">${renderCards(otherLinks)}</div>`;
-            }
-            container.innerHTML = htmlOut;
+            document.getElementById('match-count').innerText = `${filtered.length} NODES`;
         }
 
-        // Real-time Search Processing
-        document.getElementById('search-input').addEventListener('input', updateView);
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.chip-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(cat));
+            });
+            renderNodes();
+        }
+
+        // Live input handling
+        const cliInput = document.getElementById('cli-input');
+        cliInput.addEventListener('input', renderNodes);
         
-        // Enter key shortcut execution
-        document.getElementById('search-input').addEventListener('keydown', function(e) {
+        // Shortcut navigation on Enter
+        cliInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                const query = this.value.toLowerCase().trim();
-                const match = allLinks.find(l => l.shortcut === query);
-                if (match) window.location.href = match.url;
+                const val = cliInput.value.toLowerCase().trim();
+                const match = nodes.find(n => n.shortcut === val || n.title.toLowerCase() === val);
+                if (match) {
+                    window.location.href = match.url;
+                }
             }
         });
 
-        // Handle direct ?shortcut or #shortcut routing from the URL
-        const directParam = window.location.search.substring(1) || window.location.hash.substring(1);
-        if (directParam) {
-            const match = allLinks.find(l => l.shortcut === directParam.toLowerCase());
-            if (match) window.location.replace(match.url);
-        }
-
-        // Fetch latest commit hash for versioning dynamically
-        fetch('https://api.github.com/repos/ivanchenkoplaton/ivanchenkoplaton.github.io/commits?per_page=1', { cache: 'no-store' })
+        // Dynamic Commit SHA Fetching
+        fetch('https://api.github.com/repos/ivanchenkoplaton/ivanchenkoplaton.github.io/commits?per_page=1')
             .then(res => res.json())
             .then(data => {
-                if (data && data.length > 0 && data[0].sha) {
-                    const hash = data[0].sha.substring(0, 7);
-                    document.getElementById('sys-version').innerText = `SYS_VER: Alpha_1.2 | build-${hash}`;
+                if (data && data[0]?.sha) {
+                    document.getElementById('git-sha').innerText = `SYS_COMMIT: ${data[0].sha.substring(0, 7)} (STABLE)`;
                 }
             })
-            .catch(err => console.log('Version fetch failed:', err));
+            .catch(() => {
+                document.getElementById('git-sha').innerText = `SYS_COMMIT: 57cb7cd (LOCAL)`;
+            });
 
-        updateView();
+        // Initialize view
+        renderNodes();
     </script>
 </body>
 </html>
